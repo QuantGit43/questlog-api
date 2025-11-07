@@ -12,6 +12,7 @@ var allowSpecificOrigins = "_allowSpecificOrigins";
 builder.Services.AddDbContext<QuestLogDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
 builder.Services.AddControllers();
 
 builder.Services.AddMediatR(cfg => 
@@ -33,7 +34,6 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API для гейміфікованого планера завдань"
     });
 });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowSpecificOrigins,
@@ -46,7 +46,6 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAuthorization();
-
 
 var app = builder.Build();
 
