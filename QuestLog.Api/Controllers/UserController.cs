@@ -10,11 +10,11 @@ namespace QuestLog.Api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly ISender _sender;
 
         public UsersController(IMediator mediator)
         {
-            _mediator = mediator;
+            _sender = mediator;
         }
         
         [HttpPost("register")]
@@ -22,7 +22,7 @@ namespace QuestLog.Api.Controllers
         {
             try
             {
-                var userId = await _mediator.Send(command);
+                var userId = await _sender.Send(command);
                 return Ok(new { UserId = userId });
             }
             catch (Exception ex)
@@ -37,7 +37,7 @@ namespace QuestLog.Api.Controllers
             try
             {
                 var query = new GetUserByIdQuery { UserId = id };
-                UserDto userDto = await _mediator.Send(query);
+                UserDto userDto = await _sender.Send(query);
                 return Ok(userDto);
             }
             catch (Exception ex)
