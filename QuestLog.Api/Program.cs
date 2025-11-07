@@ -1,12 +1,13 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using QuestLog.Application.Feature.Users.Commands; 
+using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 using QuestLog.Infrastructure.Data;
 using QuestLog.Infrastructure.Repositories;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
+var allowSpecificOrigins = "_allowSpecificOrigins";
 
 builder.Services.AddDbContext<QuestLogDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -18,13 +19,9 @@ builder.Services.AddMediatR(cfg =>
 );
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>(); 
 builder.Services.AddScoped<IAvatarRepository, AvatarRepository>();
-
-
 
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen(options =>
@@ -37,9 +34,21 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") 
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -52,6 +61,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(allowSpecificOrigins);
+app.UseAuthorization();
 
 app.MapControllers();
 
