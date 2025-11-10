@@ -28,26 +28,9 @@ public class CreateUserCommandHandler: IRequestHandler<CreateUserCommand, Guid>
 
         var hashedPasword = request.Password; //Тимчасова заглушка
 
-        var avatar = new Avatar
-        {
-            Id = Guid.NewGuid(),
-            Name = request.AvatarName,
-            Class = request.AvatarClass,
-            Level = 1,
-            XP = 0,
-            HP = 100,
-            MaxHP = 100,
-            Gold = 0,
-        };
+        var avatar = new Avatar(request.AvatarName, request.AvatarClass);
 
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            Username = request.Username,
-            Email = request.Email,
-            HashedPassword = hashedPasword,
-            Avatar = avatar
-        };
+        var user = new User(request.Username, request.Email, hashedPasword, avatar);
         
         await _unitOfWork.Users.AddAsync(user);
 
