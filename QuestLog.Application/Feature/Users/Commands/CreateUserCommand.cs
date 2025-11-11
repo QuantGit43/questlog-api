@@ -3,7 +3,7 @@ using QuestLog.Domain.Enums;
 
 namespace QuestLog.Application.Feature.Users.Commands;
 
-public class CreateUserCommand: IRequest<Guid>
+public record CreateUserCommand: IRequest<Guid>
 {
     public string? Username { get; set; }
     public string? Email { get; set; }

@@ -4,17 +4,71 @@ namespace QuestLog.Domain.Entities;
 
 public class Avatar
 {
-    public Guid Id { get; set; }
-    public Guid UserId { get; set; }
-    public virtual User User { get; set; }
+    public Guid Id { get; private set; }
+    public Guid UserId { get; private set; }
+    public User? User { get; private set; }
     
-    public string Name { get; set; }
-    public AvatarClass Class { get; set; }
-    public int Level { get; set; }
-    public long XP { get; set; }
-    public int HP { get; set; }
-    public int MaxHP { get; set; }
-    public int Gold { get; set; }
+    public string? Name { get; private set; }
+    public AvatarClass Class { get; private set; }
+    public int Level { get; private set; }
     
-    public virtual ICollection<Task>  Tasks { get; set; } = new List<Task>();
+    public long XP { get; private set; }
+    public int HP { get; private set; }
+    public int MaxHP { get; private set; }
+    public int Gold { get; private set; }
+    public virtual ICollection<Task>  Tasks { get; private set; } = new List<Task>();
+
+    private Avatar() 
+    {
+        Tasks = new HashSet<Task>();
+    }
+    public Avatar(string name, AvatarClass avatarClass)
+    {
+        Id = Guid.NewGuid();
+        Name = name;
+        Class = avatarClass;
+        Level = 1;
+        XP = 0;
+        MaxHP = 100; 
+        HP = MaxHP;
+        Gold = 0;
+        
+        Tasks = new HashSet<Task>();
+
+    }
+    
+    public void AddExperience(long amount)
+    {
+        if (amount < 0) return;
+        XP += amount;
+    }
+
+    public void AddGold(int amount)
+    {
+        if (amount < 0) return;
+        Gold += amount;
+    }
+    public void TakeDamage(int amount)
+    {
+        if (amount < 0) return; 
+
+        HP -= amount;
+
+        if (HP < 0)
+        {
+            HP = 0;
+        }
+    }
+    public void Heal(int amount)
+    {
+        if (amount < 0) return; 
+
+        HP += amount;
+
+        if (HP > MaxHP)
+        {
+            HP = MaxHP;
+        }
+    }
+    
 }

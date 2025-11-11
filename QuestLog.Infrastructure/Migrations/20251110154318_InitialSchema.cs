@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuestLog.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,8 @@ namespace QuestLog.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
+                    Username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     HashedPassword = table.Column<string>(type: "text", nullable: false),
                     AvatarId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -33,7 +33,7 @@ namespace QuestLog.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Class = table.Column<string>(type: "text", nullable: false),
                     Level = table.Column<int>(type: "integer", nullable: false),
                     XP = table.Column<long>(type: "bigint", nullable: false),
@@ -44,6 +44,10 @@ namespace QuestLog.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Avatars", x => x.Id);
+                    table.CheckConstraint("CK_Avatar_Gold_Positive", "\"Gold\" >= 0");
+                    table.CheckConstraint("CK_Avatar_HP_Validation", "\"HP\" >= 0 AND \"HP\" <= \"MaxHP\"");
+                    table.CheckConstraint("CK_Avatar_Level_Positive", "\"Level\" >= 1");
+                    table.CheckConstraint("CK_Avatar_XP_Positive", "\"XP\" >= 0");
                     table.ForeignKey(
                         name: "FK_Avatars_Users_UserId",
                         column: x => x.UserId,
@@ -58,8 +62,9 @@ namespace QuestLog.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerAvatarId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -70,9 +75,17 @@ namespace QuestLog.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.CheckConstraint("CK_Quest_GoldReward_Positive", "\"GoldReward\" >= 0");
+                    table.CheckConstraint("CK_Quest_XPReward_Positive", "\"XPReward\" >= 0");
                     table.ForeignKey(
                         name: "FK_Tasks_Avatars_OwnerAvatarId",
                         column: x => x.OwnerAvatarId,
+                        principalTable: "Avatars",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Avatars_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "Avatars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -88,6 +101,23 @@ namespace QuestLog.Infrastructure.Migrations
                 name: "IX_Tasks_OwnerAvatarId",
                 table: "Tasks",
                 column: "OwnerAvatarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_OwnerId",
+                table: "Tasks",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />
