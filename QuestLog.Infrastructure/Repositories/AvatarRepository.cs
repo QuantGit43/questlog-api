@@ -1,4 +1,4 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using QuestLog.Domain.Entities;
 using QuestLog.Domain.Interfaces;
 using QuestLog.Infrastructure.Data;
@@ -9,10 +9,17 @@ public class AvatarRepository: Repository<Avatar>, IAvatarRepository
 {
     public  AvatarRepository(QuestLogDbContext context): base(context){}
 
-    public async Task<Avatar> GetByUserIdAsync(Guid userId)
+    public async Task<Avatar?> GetByUserIdAsync(Guid userId)
     {
         return await _context.Avatars
             .Include(a => a.Tasks)
             .FirstOrDefaultAsync(a => a.UserId == userId);
+    }
+    public new async Task<Avatar?> GetByIdAsync(Guid id)
+    {
+        return await _context.Avatars
+            .Include(a => a.User) 
+            .Include(a => a.Tasks) 
+            .FirstOrDefaultAsync(a => a.Id == id);
     }
 }

@@ -70,5 +70,13 @@ public class Avatar
             HP = MaxHP;
         }
     }
+    public void ChangeName(string newName)
+    {
+        if (string.IsNullOrWhiteSpace(newName) || newName.Length > 50)
+        {
+            throw new ArgumentException("The name cannot be empty or longer than 50 characters.\n");
+        }
+        Name = newName;
+    }
     
 }
