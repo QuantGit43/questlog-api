@@ -7,14 +7,14 @@ using QuestLog.Application.Feature.Users.Queries;
 namespace QuestLog.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsersController : ControllerBase
     {
         private readonly ISender _sender;
 
-        public UsersController(IMediator mediator)
+        public UsersController(ISender sender)
         {
-            _sender = mediator;
+            _sender = sender;
         }
         
         [HttpPost("register")]
@@ -43,6 +43,47 @@ namespace QuestLog.Api.Controllers
             catch (Exception ex)
             {
                 return NotFound(new { Error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                return Ok(await _sender.Send(new GetAllUsersQuery()));
+            }
+            catch (Exception ex)
+            {
+               return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+        [HttpDelete(("{id:guid}"))]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            try
+            {
+                await _sender.Send(new DeleteUserCommand{UserId = id});
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
+        {
+            try
+            {
+              await _sender.Send(command);
+              return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
             }
         }
     }

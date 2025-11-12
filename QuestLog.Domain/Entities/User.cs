@@ -31,4 +31,19 @@ public class User
         Avatar = avatar;
         Id = Guid.NewGuid();
     }
+    
+    public void UpdateProfile(string username, string email)
+    {
+        if (string.IsNullOrWhiteSpace(username) || username.Length > 50)
+        {
+            throw new ArgumentException("Username cannot be empty or longer than 50 characters.\n");
+        }
+        if (string.IsNullOrWhiteSpace(email) || email.Length > 100) 
+        {
+            throw new ArgumentException("Email cannot be empty or longer than 100 characters.\n");
+        }
+
+        Username = username;
+        Email = email;
+    }
 }
