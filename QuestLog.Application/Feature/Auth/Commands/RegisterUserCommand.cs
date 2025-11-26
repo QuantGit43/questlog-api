@@ -1,6 +1,10 @@
-﻿namespace QuestLog.Application.Feature.Auth.Commands;
+﻿using MediatR;
 
-public class RegisterUserCommand
+namespace QuestLog.Application.Feature.Auth.Commands;
+
+public class RegisterUserCommand : IRequest<Unit>
 {
-    
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
 }

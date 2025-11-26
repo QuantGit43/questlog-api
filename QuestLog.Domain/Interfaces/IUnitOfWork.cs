@@ -7,4 +7,5 @@ public interface IUnitOfWork: IDisposable
     IAvatarRepository Avatars { get; }
     
     Task<int> CompleteAsync();
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

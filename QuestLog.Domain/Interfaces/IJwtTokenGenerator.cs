@@ -1,6 +1,9 @@
-﻿namespace QuestLog.Domain.Interfaces;
+﻿using QuestLog.Domain.Entities; 
 
-public interface IJwtTokenGenerator
+namespace QuestLog.Domain.Interfaces
 {
-    
+    public interface IJwtTokenGenerator
+    {
+        string GenerateToken(User user);
+    }
 }
