@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace QuestLog.Application.Feature.Users.Commands;
+namespace QuestLog.Application.Feature.Avatars.Commands;
 
 public class UpdateAvatarCommand: IRequest
 {

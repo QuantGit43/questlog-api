@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using QuestLog.Application.Dto;
-using QuestLog.Application.Feature.Users.Queries;
+using QuestLog.Application.Feature.Avatars.Queries;
 using QuestLog.Domain.Interfaces;
 
-namespace QuestLog.Application.Feature.Users.QueriesHandlers;
+namespace QuestLog.Application.Feature.Avatars.QueriesHandlers;
 
 public class GetAllAvatarsQueryHandler: IRequestHandler<GetAllAvatarsQuery, IEnumerable<AvatarDto>>
 {

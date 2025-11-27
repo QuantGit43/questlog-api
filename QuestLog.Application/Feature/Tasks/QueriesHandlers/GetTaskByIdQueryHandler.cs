@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using QuestLog.Application.Dto;
+using QuestLog.Application.Feature.Tasks.Queries;
 using QuestLog.Application.Feature.Users.Queries;
 using QuestLog.Domain.Interfaces;
 
-namespace QuestLog.Application.Feature.Users.QueriesHandlers;
+namespace QuestLog.Application.Feature.Tasks.QueriesHandlers;
 
 public class GetTaskByIdQueryHandler: IRequestHandler<GetTaskByIdQuery, TaskDto>
 {
@@ -19,7 +20,7 @@ public class GetTaskByIdQueryHandler: IRequestHandler<GetTaskByIdQuery, TaskDto>
         var query = await _taskRepository.GetByIdAsync(request.TaskId);
         if (query == null)
         {
-            throw new Exception("Task not found");
+            throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
         }
 
         return new TaskDto

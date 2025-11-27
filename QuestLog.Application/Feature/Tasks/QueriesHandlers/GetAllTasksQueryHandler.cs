@@ -1,23 +1,23 @@
 ﻿using MediatR;
 using QuestLog.Application.Dto;
+using QuestLog.Application.Feature.Tasks.Queries;
 using QuestLog.Application.Feature.Users.Queries;
 using QuestLog.Domain.Interfaces;
 
-namespace QuestLog.Application.Feature.Users.QueriesHandlers;
+namespace QuestLog.Application.Feature.Tasks.QueriesHandlers;
 
-public class GetTaskByAvatarQueryHandler: IRequestHandler<GetTaskByAvatarQuery, IEnumerable<TaskDto>>
+public class GetAllTasksQueryHandler: IRequestHandler<GetAllTasksQuery, IEnumerable<TaskDto>>
 {
     private readonly ITaskRepository _taskRepository;
-    
-    public GetTaskByAvatarQueryHandler(ITaskRepository taskRepository)
+
+    public GetAllTasksQueryHandler(ITaskRepository taskRepository)
     {
         _taskRepository = taskRepository;
     }
 
-    public async Task<IEnumerable<TaskDto>> Handle(GetTaskByAvatarQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TaskDto>> Handle(GetAllTasksQuery request, CancellationToken cancellationToken)
     {
-        var tasks = await _taskRepository.GetTasksByAvatarIdAsync(request.AvatarId);
-
+        var tasks = await _taskRepository.GetAllAsync();
         return tasks.Select(q => new TaskDto
         {
             Id = q.Id,
@@ -27,7 +27,7 @@ public class GetTaskByAvatarQueryHandler: IRequestHandler<GetTaskByAvatarQuery, 
             IsCompleted = q.IsCompleted,
             XPReward = q.XPReward,
             GoldReward = q.GoldReward,
-            DueDate = q.DueDate,
+            DueDate = q.DueDate
         });
     }
 }

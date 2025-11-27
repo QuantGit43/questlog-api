@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using QuestLog.Application.Feature.Tasks.Commands;
 using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 using Task = QuestLog.Domain.Entities.Task;
 
 
-namespace QuestLog.Application.Feature.Users.CommandsHandlers;
+namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 
 public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
 {
@@ -21,9 +22,13 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
             .AnyAsync(a => a.Id == request.AvatarId);       
             if (!avatarExists)
             {
-                throw new Exception("Avatar not found");
-
+                throw new KeyNotFoundException($"Аватар з ID {request.AvatarId} не знайдений. Неможливо створити завдання.");
             }
+            if (string.IsNullOrWhiteSpace(request.Title))
+            {
+                throw new ArgumentException("Заголовок завдання не може бути пустим.");
+            }
+            
         var task = new Task(
             request.AvatarId,
             request.Title,

@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using QuestLog.Application.Dto;
-using QuestLog.Application.Feature.Users.Queries;
+using QuestLog.Application.Feature.Avatars.Queries;
 using QuestLog.Domain.Interfaces;
 
-namespace QuestLog.Application.Feature.Users.QueriesHandlers;
+namespace QuestLog.Application.Feature.Avatars.QueriesHandlers;
 
 public class GetAvatarByIdQueryHandler : IRequestHandler<GetAvatarByIdQuery, AvatarDto>
 {
@@ -19,7 +19,7 @@ public class GetAvatarByIdQueryHandler : IRequestHandler<GetAvatarByIdQuery, Ava
     var avatar = await _avatarRepository.GetByIdAsync(request.AvatarId);
     if (avatar == null)
     {
-      throw new System.Exception("Avatar not found");
+      throw new KeyNotFoundException($"Аватар з ID {request.AvatarId} не знайдений.");
     }
 
     return new AvatarDto

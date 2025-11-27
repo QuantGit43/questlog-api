@@ -22,7 +22,7 @@ public class Avatar
     {
         Tasks = new HashSet<Task>();
     }
-    public Avatar(string name, AvatarClass avatarClass)
+    public Avatar(string? name, AvatarClass avatarClass)
     {
         Id = Guid.NewGuid();
         Name = name;
