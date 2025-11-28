@@ -26,7 +26,7 @@ public class User
     
     protected User() {}
 
-    public User(string username, string email, string passwordHash, Avatar? avatar = null)
+    public User(string? username, string? email, string? passwordHash, Avatar? avatar = null)
     {
         Id = Guid.NewGuid();
         Username = username;

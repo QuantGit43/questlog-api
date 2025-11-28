@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using QuestLog.Application.Feature.Tasks.Commands;
 using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 
-namespace QuestLog.Application.Feature.Users.CommandsHandlers;
+namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 
 public class UpdateTaskCommandHandler: IRequestHandler<UpdateTaskCommand>
 {
@@ -18,12 +19,12 @@ public async Task Handle(UpdateTaskCommand request, CancellationToken cancellati
     var quest = await _unitOfWork.Tasks.GetByIdAsync(request.TaskId);
     if (quest == null)
     {
-        throw new Exception("Quest not found.\n");
+        throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
     }
 
     if (quest.OwnerAvatarId != request.AvatarId)
     {
-        throw new Exception("You cannot edit someone else's quest.\n");
+        throw new UnauthorizedAccessException("Це завдання вам не належить.");
     }
     quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward);
 

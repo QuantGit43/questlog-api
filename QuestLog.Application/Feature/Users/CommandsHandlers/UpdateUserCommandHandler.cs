@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
 using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 
@@ -18,17 +19,17 @@ public class UpdateUserCommandHandler: IRequestHandler<UpdateUserCommand>
         var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new KeyNotFoundException($"Користувача з ID {request.UserId} не знайдено.");
         }
         var exitingEmail = await _unitOfWork.Users.GetByEmailAsync(request.Email);
         if (exitingEmail != null && exitingEmail.Id != request.UserId)
         {
-            throw new Exception("This Email is already occupied by another user.\n");
+            throw new ValidationException("Цей Email вже використовується іншим користувачем.");
         }
         var existingUsername = await _unitOfWork.Users.GetByUsernameAsync(request.Username);
         if (existingUsername != null && existingUsername.Id != request.UserId)
         {
-            throw new Exception("This Username is already occupied by another user.\n");
+            throw new ValidationException("Цей Username вже використовується іншим користувачем.");
         }
         
         user.UpdateProfile(request.Username, request.Email );

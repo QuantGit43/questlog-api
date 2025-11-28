@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using QuestLog.Application.Feature.Tasks.Commands;
 using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 
-namespace QuestLog.Application.Feature.Users.CommandsHandlers;
+namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 
 public class DeleteTaskCommandHandler: IRequestHandler<DeleteTaskCommand>
 {
@@ -18,11 +19,11 @@ public class DeleteTaskCommandHandler: IRequestHandler<DeleteTaskCommand>
         var task = await _unitOfWork.Tasks.GetByIdAsync(request.TaskId);
         if (task == null)
         {
-            throw new Exception("Task not found");
+            throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
         }
         if (task.OwnerAvatarId != request.AvatarId)
         {
-            throw new Exception("Not owner avatar");
+            throw new UnauthorizedAccessException("Це завдання вам не належить.");
         }
         _unitOfWork.Tasks.Remove(task);
         await _unitOfWork.CompleteAsync();

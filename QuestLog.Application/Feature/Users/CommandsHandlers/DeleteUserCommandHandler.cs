@@ -17,7 +17,7 @@ public class DeleteUserCommandHandler: IRequestHandler<DeleteUserCommand>
         var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new KeyNotFoundException($"Користувача з ID {request.UserId} не знайдено.");
         }
         var avatar = await _unitOfWork.Avatars.GetByIdAsync(user.AvatarId); 
         if (avatar != null) _unitOfWork.Avatars.Remove(avatar);

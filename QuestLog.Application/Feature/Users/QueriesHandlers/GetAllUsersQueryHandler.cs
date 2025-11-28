@@ -23,6 +23,7 @@ public class GetAllUsersQueryHandler: IRequestHandler<GetAllUsersQuery, IEnumera
             var userWithAvatar = await _userRepository.GetByIdAsync(user.Id);
             if (userWithAvatar != null)
             {
+                if (userWithAvatar.Avatar != null)
                     userDtos.Add(new UserDto
                     {
                         Id = userWithAvatar.Id,
