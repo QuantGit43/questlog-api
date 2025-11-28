@@ -4,6 +4,8 @@ using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 using QuestLog.Infrastructure.Data;
 using QuestLog.Infrastructure.Repositories;
+using QuestLog.Infrastructure.Services;
+using QuestLog.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,8 +48,12 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -63,6 +69,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(allowSpecificOrigins);
 app.UseAuthorization();
+
 
 app.MapControllers();
 

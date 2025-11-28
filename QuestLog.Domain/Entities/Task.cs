@@ -9,8 +9,8 @@ public class Task
     
     [Required]
     public Guid OwnerAvatarId { get; set; }
-    public virtual Avatar Owner { get; set; }
-    
+    public virtual Avatar Avatar { get; private set; }
+
     [Required]
     [MaxLength(100)]
     public string Title { get; set; }
@@ -31,7 +31,6 @@ public class Task
     
     public DateTime? DueDate { get; set; }
     
-    public virtual Avatar Avatar { get; private set; }
     
     private Task() { }
     
@@ -39,7 +38,7 @@ public class Task
     {
         if (xpReward < 0 || goldReward < 0)
         {
-            throw new ArgumentException("Нагороди не можуть бути від'ємними.");
+            throw new ArgumentException("Awards cannot be negative.\n");
         }
             
         Id = Guid.NewGuid();
@@ -58,5 +57,21 @@ public class Task
         {
             IsCompleted = true;
         }
+    }
+    public void UpdateDetails(string title, string description, int xpReward, int goldReward)
+    {
+        if (string.IsNullOrWhiteSpace(title) || title.Length > 100)
+        {
+            throw new ArgumentException("The title cannot be empty or longer than 100 characters.\n");
+        }
+        if (xpReward < 0 || goldReward < 0)
+        {
+            throw new ArgumentException("Awards cannot be negative.\n");
+        }
+
+        Title = title;
+        Description = description;
+        XPReward = xpReward;
+        GoldReward = goldReward;
     }
 }

@@ -19,4 +19,9 @@
       <ProjectReference Include="..\QuestLog.Domain\QuestLog.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Feature\Auth\QueriesHandlers\" />
+      <Folder Include="Feature\Auth\Queries\" />
+    </ItemGroup>
+
 </Project>

@@ -12,8 +12,8 @@ using QuestLog.Infrastructure.Data;
 namespace QuestLog.Infrastructure.Migrations
 {
     [DbContext(typeof(QuestLogDbContext))]
-    [Migration("20251110154318_InitialSchema")]
-    partial class InitialSchema
+    [Migration("20251118195242_UpdateUserPasswordColumn")]
+    partial class UpdateUserPasswordColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,9 +101,6 @@ namespace QuestLog.Infrastructure.Migrations
                     b.Property<Guid>("OwnerAvatarId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -119,8 +116,6 @@ namespace QuestLog.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerAvatarId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Tasks", t =>
                         {
@@ -147,7 +142,7 @@ namespace QuestLog.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("HashedPassword")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -186,15 +181,7 @@ namespace QuestLog.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QuestLog.Domain.Entities.Avatar", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Avatar");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("QuestLog.Domain.Entities.Avatar", b =>

@@ -62,7 +62,6 @@ namespace QuestLog.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerAvatarId = table.Column<Guid>(type: "uuid", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
@@ -83,12 +82,6 @@ namespace QuestLog.Infrastructure.Migrations
                         principalTable: "Avatars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Avatars_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Avatars",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -101,11 +94,6 @@ namespace QuestLog.Infrastructure.Migrations
                 name: "IX_Tasks_OwnerAvatarId",
                 table: "Tasks",
                 column: "OwnerAvatarId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_OwnerId",
-                table: "Tasks",
-                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

@@ -55,4 +55,9 @@ public class Repository<T> : IRepository<T> where T : class
     {
         _entities.Update(entity);
     }
+
+    public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _entities.AnyAsync(predicate);
+    }
 }

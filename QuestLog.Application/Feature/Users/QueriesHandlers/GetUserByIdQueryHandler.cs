@@ -20,7 +20,7 @@ public class GetUserByIdQueryHandler: IRequestHandler<GetUserByIdQuery, UserDto>
 
         if (user == null)
         {
-            throw new Exception("Користувача не знайдено.");
+            throw new KeyNotFoundException($"Користувача з ID {request.UserId} не знайдено.");
         }
 
         return new UserDto()
