@@ -6,6 +6,8 @@ using QuestLog.Infrastructure.Data;
 using QuestLog.Infrastructure.Repositories;
 using QuestLog.Infrastructure.Services;
 using QuestLog.Api.Middleware;
+using FluentValidation;
+using QuestLog.Application.Common.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +19,14 @@ builder.Services.AddDbContext<QuestLogDbContext>(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddMediatR(cfg => 
-    cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly)
-);
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly);
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+
+});
+
+builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommand).Assembly);
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

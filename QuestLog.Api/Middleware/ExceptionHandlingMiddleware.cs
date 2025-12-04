@@ -1,6 +1,7 @@
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
+using QuestLog.Application.Exeptions;
+
 namespace QuestLog.Api.Middleware
 {
 
