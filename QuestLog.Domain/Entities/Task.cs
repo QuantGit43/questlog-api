@@ -5,31 +5,31 @@ namespace QuestLog.Domain.Entities;
 
 public class Task
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; private set; }
     
     [Required]
-    public Guid OwnerAvatarId { get; set; }
+    public Guid OwnerAvatarId { get; private set; }
     public virtual Avatar Avatar { get; private set; }
 
     [Required]
     [MaxLength(100)]
-    public string Title { get; set; }
+    public string Title { get; private set; }
     
     [MaxLength(500)]
-    public string Description { get; set; }
+    public string Description { get; private set; }
     
     [Required]
-    public TaskType Type { get; set; }
-    public bool IsCompleted { get; set; }
-    public DateTime? CreatedAt { get; set; }
+    public TaskType Type { get; private set; }
+    public bool IsCompleted { get; private set; }
+    public DateTime CreatedAt { get; private set; }
     
     [Range(0, 1000000)]
-    public int XPReward { get; set; }
+    public int XPReward { get; private set; }
     
     [Range(0, 1000000)]
-    public int GoldReward { get; set; }
+    public int GoldReward { get; private set; }
     
-    public DateTime? DueDate { get; set; }
+    public DateTime? DueDate { get; private set; }
     
     
     private Task() { }
@@ -49,6 +49,7 @@ public class Task
         GoldReward = goldReward;
         Description = description;
         DueDate = dueDate;
+        CreatedAt = DateTime.UtcNow;
         IsCompleted = false;
     }
     public void Complete()

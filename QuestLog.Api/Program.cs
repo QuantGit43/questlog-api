@@ -28,10 +28,11 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommand).Assembly);
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>(); 
 builder.Services.AddScoped<IAvatarRepository, AvatarRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen(options =>
