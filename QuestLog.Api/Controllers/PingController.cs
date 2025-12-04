@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace QuestLog.Api.Controllers;
 
@@ -6,7 +7,7 @@ namespace QuestLog.Api.Controllers;
 [Route("api/[controller]")]
 public class PingController : ControllerBase
 {
-    [HttpGet] 
+    [HttpGet]
     public IActionResult Get() 
     { 
         return Ok(new { message = "pong" });
