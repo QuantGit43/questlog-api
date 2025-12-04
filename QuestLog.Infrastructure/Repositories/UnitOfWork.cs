@@ -6,18 +6,21 @@ namespace QuestLog.Infrastructure.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly QuestLogDbContext _context;
-    
     public IAvatarRepository Avatars { get; }
     public IUserRepository Users { get; }
     public ITaskRepository Tasks { get; }
     
-    public UnitOfWork(QuestLogDbContext context)
+    public UnitOfWork(
+        QuestLogDbContext context, 
+        IUserRepository userRepository,
+        IAvatarRepository avatarRepository,
+        ITaskRepository taskRepository)
     {
         _context = context;
         
-        Avatars = new AvatarRepository(_context);
-        Users = new UserRepository(_context);
-        Tasks = new TaskRepository(_context);
+        Avatars = avatarRepository;
+        Users = userRepository;
+        Tasks = taskRepository;
     }
 
     public async Task<int> CompleteAsync()
