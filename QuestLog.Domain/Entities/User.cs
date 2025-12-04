@@ -16,7 +16,6 @@ public class User
     public string? Email { get; private set; }
     
     [Required]
-    // 👇 1. RENAMED 'HashedPassword' to 'PasswordHash' for consistency
     public string? PasswordHash { get; private set; } 
     
     public Guid AvatarId { get; private set; }
