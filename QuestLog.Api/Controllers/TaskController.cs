@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestLog.Application.Feature.Tasks.Commands;
 using QuestLog.Application.Feature.Tasks.Queries;
-using QuestLog.Application.Feature.Users.Commands;
-using QuestLog.Application.Feature.Users.Queries;
 
 namespace QuestLog.Api.Controllers;
 
