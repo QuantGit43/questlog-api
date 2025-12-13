@@ -48,7 +48,7 @@ public class Task
         XPReward = xpReward;
         GoldReward = goldReward;
         Description = description;
-        DueDate = dueDate;
+        DueDate = dueDate.HasValue ? DateTime.SpecifyKind(dueDate.Value, DateTimeKind.Utc) : null;
         CreatedAt = DateTime.UtcNow;
         IsCompleted = false;
     }

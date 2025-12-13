@@ -2,6 +2,7 @@
 
 using MediatR;
 using QuestLog.Application.Feature.Auth.Commands;
+using QuestLog.Domain.Exeptions;
 using QuestLog.Domain.Interfaces;
 
 public class LoginUserHandler : IRequestHandler<LoginUserCommand, AuthResponse>
@@ -32,7 +33,7 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, AuthResponse>
         // 2. Перевірити пароль
         if (!_passwordHasher.Verify(user.PasswordHash, request.Password))
         {
-            throw new Exception("Invalid email or password.");
+            throw new InvalidCredentialsException("Invalid email or password.");
         }
 
         // 3. Згенерувати JWT токен

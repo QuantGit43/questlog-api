@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using ValidationException = QuestLog.Application.Exeptions.ValidationException;
+using ValidationException = QuestLog.Application.Exceptions.ValidationException;
 
 namespace QuestLog.Application.Common.Behaviors;
 
