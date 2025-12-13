@@ -4,7 +4,6 @@ using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 using Task = QuestLog.Domain.Entities.Task;
 
-
 namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 
 public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
@@ -28,7 +27,6 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
             {
                 throw new ArgumentException("Заголовок завдання не може бути пустим.");
             }
-            
         var task = new Task(
             request.AvatarId,
             request.Title,

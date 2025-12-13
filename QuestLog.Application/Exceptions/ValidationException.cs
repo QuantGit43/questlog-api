@@ -1,4 +1,4 @@
-﻿namespace QuestLog.Application.Exeptions;
+﻿namespace QuestLog.Application.Exceptions;
 
 public class ValidationException : Exception
 {

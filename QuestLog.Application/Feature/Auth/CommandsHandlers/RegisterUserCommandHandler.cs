@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using QuestLog.Application.Feature.Auth.Commands;
 using QuestLog.Domain.Entities;
+using QuestLog.Domain.Enums;
+using QuestLog.Domain.Exeptions;
 using QuestLog.Domain.Interfaces;
 
 namespace QuestLog.Application.Feature.Auth.CommandsHandlers;
@@ -25,15 +27,17 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Unit>
     {
         if (await _userRepository.GetByEmailAsync(request.Email) != null)
         {
-            throw new Exception("User with this email already exists.");
+            throw new InvalidCredentialsException("User with this email already exists.");
         }
 
         var passwordHash = _passwordHasher.Hash(request.Password);
 
+        var avatar = new Avatar(request.Username, AvatarClass.Warrior); // Warrior is default avatar
         var user = new User(
             request.Username,
             request.Email,
-            passwordHash
+            passwordHash,
+            avatar
         );
 
         await _userRepository.AddAsync(user);

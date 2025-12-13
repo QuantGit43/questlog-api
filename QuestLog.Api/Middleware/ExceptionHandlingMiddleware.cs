@@ -1,6 +1,8 @@
 using System.Net;
+using System.Security.Authentication;
 using System.Text.Json;
-using QuestLog.Application.Exeptions;
+using QuestLog.Api.Exceptions;
+using QuestLog.Application.Exceptions;
 
 namespace QuestLog.Api.Middleware
 {
@@ -74,6 +76,11 @@ namespace QuestLog.Api.Middleware
                     message = kex.Message;
                     break;
                 
+                case EmptyAvatarIdException:
+                    status = StatusCodes.Status400BadRequest;
+                    message = "Avatar ID cannot be empty.";
+                    break;
+                
                 case InvalidOperationException ioex when ioex.Message.Contains("already exists"):
                     status = StatusCodes.Status409Conflict;
                     message = ioex.Message;
@@ -92,6 +99,11 @@ namespace QuestLog.Api.Middleware
                 case TimeoutException:
                     status = StatusCodes.Status503ServiceUnavailable;
                     message = "The service is currently unavailable. Please try again later.";
+                    break;
+                
+                case InvalidCredentialException:
+                    status = StatusCodes.Status409Conflict;
+                    message = "Invalid credentials.";
                     break;
             }
 

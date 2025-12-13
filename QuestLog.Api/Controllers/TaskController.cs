@@ -1,12 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuestLog.Api.Exceptions;
+using QuestLog.Api.Extentions;
 using QuestLog.Application.Feature.Tasks.Commands;
 using QuestLog.Application.Feature.Tasks.Queries;
 
 namespace QuestLog.Api.Controllers;
 
-[ApiController ][Authorize]
+[ApiController][Authorize]
 [Route("api/tasks")]
 public class TaskController: ControllerBase
 {
@@ -20,8 +22,11 @@ public class TaskController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateQuest([FromBody] CreateTaskCommand command)
     {
-            var taskid = await _sender.Send(command);
-            return Ok(new {TaskId = taskid});
+            command.AvatarId = User.GetAvatarId();
+            if (command.AvatarId == Guid.Empty) throw new EmptyAvatarIdException("AvatarId is empty.");
+            
+            var taskId = await _sender.Send(command);
+            return Ok(new {TaskId = taskId});
     }
 
     [HttpGet("/api/avatars/{avatarId:guid}/tasks")]
@@ -58,6 +63,6 @@ public class TaskController: ControllerBase
     {
             var query = new GetAllTasksQuery();
             var tasks = await _sender.Send(query);
-          return Ok(tasks);
+            return Ok(tasks);
     }
 }
