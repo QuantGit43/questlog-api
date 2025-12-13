@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
+﻿using MediatR;
+using QuestLog.Application.Exeptions;
 using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 

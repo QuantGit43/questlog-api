@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestLog.Application.Feature.Avatars.Commands;
 using QuestLog.Application.Feature.Avatars.Queries;
@@ -7,7 +8,7 @@ using QuestLog.Application.Feature.Users.Queries;
 
 namespace QuestLog.Api.Controllers;
 
-[ApiController ]
+[ApiController ][Authorize]
 [Route("api/avatars")]
 public class AvatarController: ControllerBase
 {

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestLog.Application.Dto;
 using QuestLog.Application.Feature.Users.Commands;
@@ -6,7 +7,7 @@ using QuestLog.Application.Feature.Users.Queries;
 
 namespace QuestLog.Api.Controllers
 {
-    [ApiController]
+    [ApiController][Authorize]
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
@@ -17,12 +18,12 @@ namespace QuestLog.Api.Controllers
             _sender = sender;
         }
         
-        [HttpPost("register")]
+        /*[HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] CreateUserCommand command)
         {
                 var userId = await _sender.Send(command);
                 return Ok(new { UserId = userId });
-        }
+        }*/
         
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetUserById(Guid id)
