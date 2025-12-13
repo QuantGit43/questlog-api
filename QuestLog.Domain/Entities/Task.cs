@@ -58,7 +58,7 @@ public class Task
             IsCompleted = true;
         }
     }
-    public void UpdateDetails(string title, string description, int xpReward, int goldReward)
+    public void UpdateDetails(string title, string description, int xpReward, int goldReward, bool requestIsCompleted)
     {
         if (string.IsNullOrWhiteSpace(title) || title.Length > 100)
         {

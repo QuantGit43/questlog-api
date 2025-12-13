@@ -26,7 +26,7 @@ public async Task Handle(UpdateTaskCommand request, CancellationToken cancellati
     {
         throw new UnauthorizedAccessException("Це завдання вам не належить.");
     }
-    quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward);
+    quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward, request.IsCompleted);
 
     _unitOfWork.Tasks.Update(quest);
     await _unitOfWork.CompleteAsync();
