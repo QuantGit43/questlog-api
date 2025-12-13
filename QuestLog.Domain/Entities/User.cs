@@ -32,6 +32,8 @@ public class User
         Email = email;
         PasswordHash = passwordHash; 
         Avatar = avatar;
+        if (avatar != null) 
+            AvatarId = avatar.Id;
     }
     
     public void UpdateProfile(string username, string email)
