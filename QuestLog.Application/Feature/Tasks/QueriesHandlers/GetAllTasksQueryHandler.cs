@@ -27,7 +27,8 @@ public class GetAllTasksQueryHandler: IRequestHandler<GetAllTasksQuery, IEnumera
             IsCompleted = q.IsCompleted,
             XPReward = q.XPReward,
             GoldReward = q.GoldReward,
-            DueDate = q.DueDate
+            DueDate = q.DueDate,
+            CreatedAt = q.CreatedAt,
         });
     }
 }

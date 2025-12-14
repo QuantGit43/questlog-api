@@ -12,4 +12,6 @@ public class TaskDto
     public int XPReward {get; set;}
     public int GoldReward {get; set;}
     public DateTime? DueDate {get; set;}
+    
+    public DateTime CreatedAt { get; set; }
 }

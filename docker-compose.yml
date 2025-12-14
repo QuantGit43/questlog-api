@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   questlog-api:
     image: questlog-api
@@ -7,20 +5,21 @@ services:
       context: .
       dockerfile: QuestLog.Api/Dockerfile
     ports:
-      - "5000:8080"  
+      - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=QuestLogDb;Username=postgres;Password=221106
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=QuestLogDb;Username=postgres;Password=${POSTGRES_PASSWORD}
+      - JwtSettings__Secret=${JWT_KEY}
     depends_on:
       - postgres
 
   postgres:
-    image: postgres:17-alpine
+    image: postgres:17
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 221106
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: QuestLogDb
     volumes:
       - postgres_data:/var/lib/postgresql/data

@@ -25,7 +25,7 @@ public class UpdateAvatarCommandHandler: IRequestHandler<UpdateAvatarCommand>
         {
             throw new UnauthorizedAccessException("Ви не можете редагувати чужого аватара.");
         }
-        avatar.ChangeName(request.NewName);
+        avatar.ChangeName(request.Name);
         
         _unitOfWork.Avatars.Update(avatar);
         await _unitOfWork.CompleteAsync();
