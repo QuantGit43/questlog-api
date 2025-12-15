@@ -29,10 +29,6 @@ public class GetUserByIdQueryHandler: IRequestHandler<GetUserByIdQuery, UserDto>
             Username = user.Username,
             Email = user.Email,
             AvatarId = user.Avatar.Id,
-            AvatarName = user.Avatar.Name,
-            AvatarLevel = user.Avatar.Level,
-            AvatarClass = user.Avatar.Class,
-
         };
     }
 }

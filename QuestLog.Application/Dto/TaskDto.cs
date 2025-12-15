@@ -5,6 +5,8 @@ namespace QuestLog.Application.Dto;
 public class TaskDto
 {
     public Guid Id { get; set; }
+    
+    public Guid AvatarId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public TaskType Type { get; set; }
