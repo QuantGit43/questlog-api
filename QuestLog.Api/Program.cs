@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;

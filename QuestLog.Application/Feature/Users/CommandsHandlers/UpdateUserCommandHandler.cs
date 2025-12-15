@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using QuestLog.Application.Exeptions;
+using QuestLog.Application.Exceptions;
 using QuestLog.Application.Feature.Users.Commands;
 using QuestLog.Domain.Interfaces;
 
