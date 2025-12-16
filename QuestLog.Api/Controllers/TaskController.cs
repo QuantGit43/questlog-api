@@ -20,7 +20,7 @@ public class TaskController: ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateQuest([FromBody] CreateTaskCommand command)
+    public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
             command.AvatarId = User.GetAvatarId();
             if (command.AvatarId == Guid.Empty) throw new EmptyAvatarIdException("AvatarId is empty.");
@@ -52,17 +52,17 @@ public class TaskController: ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteTask([FromBody] DeleteTaskCommand command)
+    public async Task<IActionResult> DeleteTask(Guid id)
     {
+           var command = new DeleteTaskCommand { TaskId = id };
            await _sender.Send(command);
            return NoContent();
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTasks()
-    {
-            var query = new GetAllTasksQuery();
-            var tasks = await _sender.Send(query);
-            return Ok(tasks);
+    public async Task<IActionResult> GetAllTasks([FromQuery] GetAllTasksQuery query)
+    {  
+          var tasks = await _sender.Send(query);
+          return Ok(tasks);
     }
 }

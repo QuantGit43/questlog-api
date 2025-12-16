@@ -14,4 +14,6 @@ public class UpdateTaskCommand: IRequest
     public string Description { get; set; }
     public int XPReward { get; set; }
     public int GoldReward { get; set; }
+    
+    public bool IsCompleted { get; set; }
 }
