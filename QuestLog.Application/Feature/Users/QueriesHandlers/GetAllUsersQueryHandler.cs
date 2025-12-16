@@ -30,9 +30,6 @@ public class GetAllUsersQueryHandler: IRequestHandler<GetAllUsersQuery, IEnumera
                         Username = userWithAvatar.Username,
                         Email = userWithAvatar.Email,
                         AvatarId = userWithAvatar.Avatar.Id,
-                        AvatarName = userWithAvatar.Avatar.Name,
-                        AvatarClass = userWithAvatar.Avatar.Class,
-                        AvatarLevel = userWithAvatar.Avatar.Level
                     });
             }
         }
