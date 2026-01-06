@@ -22,9 +22,6 @@ public class TaskController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
-            command.AvatarId = User.GetAvatarId();
-            if (command.AvatarId == Guid.Empty) throw new EmptyAvatarIdException("AvatarId is empty.");
-            
             var taskId = await _sender.Send(command);
             return Ok(new {TaskId = taskId});
     }
@@ -47,8 +44,8 @@ public class TaskController: ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskCommand command)
     {
-            await _sender.Send(command);
-            return Ok();
+        await _sender.Send(command);
+        return Ok();
     }
 
     [HttpDelete]
