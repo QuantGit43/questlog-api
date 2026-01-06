@@ -1,0 +1,20 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  questlog-api:
+    build:
+      context: "C:\\Users\\Білеуш Антон\\RiderProjects\\QuestLog"
+      dockerfile: "QuestLog.Api/Dockerfile"
+      target: "build"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/QuestLog.Api.dll"
+    environment: {}
+    image: "questlog-api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\Білеуш Антон\\RiderProjects\\QuestLog\\QuestLog.Api:/app:rw"
+    - "C:\\Users\\Білеуш Антон\\RiderProjects\\QuestLog:/src:rw"
+    - "C:\\Users\\Білеуш Антон\\AppData\\Roaming\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+    - "C:\\Users\\Білеуш Антон\\.nuget\\packages:/root/.nuget/packages"
+    working_dir: "/app"

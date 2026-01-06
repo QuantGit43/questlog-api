@@ -12,8 +12,8 @@ using QuestLog.Infrastructure.Data;
 namespace QuestLog.Infrastructure.Migrations
 {
     [DbContext(typeof(QuestLogDbContext))]
-    [Migration("20251105101717_Initial")]
-    partial class Initial
+    [Migration("20260106102046_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,8 @@ namespace QuestLog.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -62,7 +63,16 @@ namespace QuestLog.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Avatars");
+                    b.ToTable("Avatars", t =>
+                        {
+                            t.HasCheckConstraint("CK_Avatar_Gold_Positive", "\"Gold\" >= 0");
+
+                            t.HasCheckConstraint("CK_Avatar_HP_Validation", "\"HP\" >= 0 AND \"HP\" <= \"MaxHP\"");
+
+                            t.HasCheckConstraint("CK_Avatar_Level_Positive", "\"Level\" >= 1");
+
+                            t.HasCheckConstraint("CK_Avatar_XP_Positive", "\"XP\" >= 0");
+                        });
                 });
 
             modelBuilder.Entity("QuestLog.Domain.Entities.Task", b =>
@@ -71,12 +81,16 @@ namespace QuestLog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<Guid>("AvatarId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("timestamp with time zone");
@@ -87,12 +101,10 @@ namespace QuestLog.Infrastructure.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("OwnerAvatarId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -103,9 +115,14 @@ namespace QuestLog.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerAvatarId");
+                    b.HasIndex("AvatarId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", t =>
+                        {
+                            t.HasCheckConstraint("CK_Quest_GoldReward_Positive", "\"GoldReward\" >= 0");
+
+                            t.HasCheckConstraint("CK_Quest_XPReward_Positive", "\"XPReward\" >= 0");
+                        });
                 });
 
             modelBuilder.Entity("QuestLog.Domain.Entities.User", b =>
@@ -122,17 +139,25 @@ namespace QuestLog.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
-                    b.Property<string>("HashedPassword")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -150,13 +175,13 @@ namespace QuestLog.Infrastructure.Migrations
 
             modelBuilder.Entity("QuestLog.Domain.Entities.Task", b =>
                 {
-                    b.HasOne("QuestLog.Domain.Entities.Avatar", "Owner")
+                    b.HasOne("QuestLog.Domain.Entities.Avatar", "Avatar")
                         .WithMany("Tasks")
-                        .HasForeignKey("OwnerAvatarId")
+                        .HasForeignKey("AvatarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("QuestLog.Domain.Entities.Avatar", b =>
@@ -166,8 +191,7 @@ namespace QuestLog.Infrastructure.Migrations
 
             modelBuilder.Entity("QuestLog.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Avatar")
-                        .IsRequired();
+                    b.Navigation("Avatar");
                 });
 #pragma warning restore 612, 618
         }

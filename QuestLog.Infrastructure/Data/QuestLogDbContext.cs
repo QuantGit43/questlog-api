@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using QuestLog.Domain.Entities;
 using Task = QuestLog.Domain.Entities.Task;
 
@@ -15,24 +16,8 @@ public class QuestLogDbContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.Entity<Avatar>()
-            .Property(p => p.Class)
-            .HasConversion<string>();
-        
-        modelBuilder.Entity<Task>()
-            .Property(p => p.Type)
-            .HasConversion<string>();
-        
-        modelBuilder.Entity<User>()
-            .HasOne(u => u.Avatar)
-            .WithOne(a => a.User)
-            .HasForeignKey<Avatar>(a => a.UserId);
 
-        modelBuilder.Entity<Avatar>()
-            .HasMany(a => a.Tasks)
-            .WithOne(t => t.Owner)
-            .HasForeignKey(q => q.OwnerAvatarId);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
    
     

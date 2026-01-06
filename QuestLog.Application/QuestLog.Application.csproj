@@ -4,13 +4,25 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <UserSecretsId>f9e33597-4690-403b-aba9-35e156e82fe8</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="EntityFramework" Version="6.5.1" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+      <PackageReference Include="MediatR" Version="13.1.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
       <PackageReference Include="Npgsql" Version="10.0.0-rc.1" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\QuestLog.Domain\QuestLog.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Feature\Auth\QueriesHandlers\" />
+      <Folder Include="Feature\Auth\Queries\" />
     </ItemGroup>
 
 </Project>
