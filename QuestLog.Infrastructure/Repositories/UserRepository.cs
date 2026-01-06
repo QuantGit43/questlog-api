@@ -26,7 +26,6 @@ public class UserRepository: Repository<User>, IUserRepository
     public new async Task<User?> GetByIdAsync(Guid id)
     {
         return await _context.Users
-            .AsNoTracking()
             .Include(u => u.Avatar)
             .FirstOrDefaultAsync(u => u.Id == id);
     }

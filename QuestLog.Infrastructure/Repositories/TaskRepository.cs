@@ -13,7 +13,7 @@ public class TaskRepository: Repository<Task>, ITaskRepository
     public async Task<IEnumerable<Task>> GetTasksByAvatarIdAsync(Guid avatarId)
     {
         return await _context.Tasks
-            .Where(q => q.OwnerAvatarId == avatarId)
+            .Where(q => q.AvatarId == avatarId)
             .AsNoTracking()
             .ToListAsync();
     }

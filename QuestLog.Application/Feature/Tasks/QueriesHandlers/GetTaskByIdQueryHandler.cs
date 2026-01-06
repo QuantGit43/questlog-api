@@ -32,7 +32,9 @@ public class GetTaskByIdQueryHandler: IRequestHandler<GetTaskByIdQuery, TaskDto>
             IsCompleted = query.IsCompleted,
             XPReward = query.XPReward,
             GoldReward = query.GoldReward,
-            DueDate = query.DueDate
+            DueDate = query.DueDate,
+            AvatarId = query.AvatarId,
+            CreatedAt = query.CreatedAt
         };
     }
 }

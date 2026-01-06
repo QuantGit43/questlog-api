@@ -34,7 +34,7 @@ public class TaskConfiguration: IEntityTypeConfiguration<Task>
        
         builder.HasOne(q => q.Avatar) 
             .WithMany(a => a.Tasks) 
-            .HasForeignKey(q => q.OwnerAvatarId)
+            .HasForeignKey(q => q.AvatarId)
             .OnDelete(DeleteBehavior.Cascade); 
     }
 }

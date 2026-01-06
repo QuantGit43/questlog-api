@@ -10,7 +10,4 @@ public class UpdateAvatarCommand: IRequest
     public string Name { get; set; }
     
     public AvatarClass Class { get; set; }
-    
-    [JsonIgnore]
-    public Guid UserId { get; set; }
 }

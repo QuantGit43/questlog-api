@@ -29,6 +29,8 @@ public class GetTaskByAvatarQueryHandler: IRequestHandler<GetTaskByAvatarQuery, 
             XPReward = q.XPReward,
             GoldReward = q.GoldReward,
             DueDate = q.DueDate,
+            AvatarId = q.AvatarId,
+            CreatedAt = q.CreatedAt
         });
     }
 }

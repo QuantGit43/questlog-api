@@ -8,9 +8,11 @@ namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 public class UpdateTaskCommandHandler: IRequestHandler<UpdateTaskCommand>
 {
 private readonly IUnitOfWork _unitOfWork;
+private readonly IUserContext _userContext;
 
-public UpdateTaskCommandHandler(IUnitOfWork unitOfWork)
+public UpdateTaskCommandHandler(IUnitOfWork unitOfWork, IUserContext userContext)
 {
+    _userContext = userContext;
     _unitOfWork = unitOfWork;
 }
 
@@ -22,10 +24,11 @@ public async Task Handle(UpdateTaskCommand request, CancellationToken cancellati
         throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
     }
 
-    if (quest.OwnerAvatarId != request.AvatarId)
+    if (quest.AvatarId != _userContext.AvatarId)
     {
         throw new UnauthorizedAccessException("Це завдання вам не належить.");
     }
+    
     quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward, request.IsCompleted);
 
     _unitOfWork.Tasks.Update(quest);
