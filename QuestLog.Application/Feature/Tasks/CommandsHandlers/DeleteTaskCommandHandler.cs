@@ -8,9 +8,11 @@ namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 public class DeleteTaskCommandHandler: IRequestHandler<DeleteTaskCommand>
 {
     private IUnitOfWork _unitOfWork;
+    private IUserContext _userContext;
     
-    public DeleteTaskCommandHandler(IUnitOfWork unitOfWork)
+    public DeleteTaskCommandHandler(IUnitOfWork unitOfWork, IUserContext userContext)
     {
+        _userContext = userContext;
         _unitOfWork = unitOfWork;
     }
 
@@ -21,7 +23,7 @@ public class DeleteTaskCommandHandler: IRequestHandler<DeleteTaskCommand>
         {
             throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
         }
-        if (task.OwnerAvatarId != request.AvatarId)
+        if (task.AvatarId != _userContext.AvatarId)
         {
             throw new UnauthorizedAccessException("Це завдання вам не належить.");
         }

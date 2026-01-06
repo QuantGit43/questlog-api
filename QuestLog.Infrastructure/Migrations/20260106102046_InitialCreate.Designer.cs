@@ -12,8 +12,8 @@ using QuestLog.Infrastructure.Data;
 namespace QuestLog.Infrastructure.Migrations
 {
     [DbContext(typeof(QuestLogDbContext))]
-    [Migration("20251118195242_UpdateUserPasswordColumn")]
-    partial class UpdateUserPasswordColumn
+    [Migration("20260106102046_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,7 +81,10 @@ namespace QuestLog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<Guid>("AvatarId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -98,9 +101,6 @@ namespace QuestLog.Infrastructure.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("OwnerAvatarId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -115,7 +115,7 @@ namespace QuestLog.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerAvatarId");
+                    b.HasIndex("AvatarId");
 
                     b.ToTable("Tasks", t =>
                         {
@@ -177,7 +177,7 @@ namespace QuestLog.Infrastructure.Migrations
                 {
                     b.HasOne("QuestLog.Domain.Entities.Avatar", "Avatar")
                         .WithMany("Tasks")
-                        .HasForeignKey("OwnerAvatarId")
+                        .HasForeignKey("AvatarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

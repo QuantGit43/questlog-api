@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using QuestLog.Domain.Enums;
 
 namespace QuestLog.Domain.Entities;
@@ -8,7 +9,7 @@ public class Task
     public Guid Id { get; private set; }
     
     [Required]
-    public Guid OwnerAvatarId { get; private set; }
+    public Guid AvatarId { get; private set; }
     public virtual Avatar Avatar { get; private set; }
 
     [Required]
@@ -34,7 +35,7 @@ public class Task
     
     private Task() { }
     
-    public Task(Guid ownerAvatarId, string title, TaskType type, int xpReward, int goldReward, string description = "", DateTime? dueDate = null)
+    public Task(Guid avatarId, string title, TaskType type, int xpReward, int goldReward, string description = "", DateTime? dueDate = null)
     {
         if (xpReward < 0 || goldReward < 0)
         {
@@ -42,7 +43,7 @@ public class Task
         }
             
         Id = Guid.NewGuid();
-        OwnerAvatarId = ownerAvatarId;
+        AvatarId = avatarId;
         Title = title;
         Type = type;
         XPReward = xpReward;

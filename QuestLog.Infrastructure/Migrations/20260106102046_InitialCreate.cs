@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuestLog.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSchema : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace QuestLog.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    HashedPassword = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
                     AvatarId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -61,12 +61,12 @@ namespace QuestLog.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    OwnerAvatarId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AvatarId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     XPReward = table.Column<int>(type: "integer", nullable: false),
                     GoldReward = table.Column<int>(type: "integer", nullable: false),
                     DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -77,8 +77,8 @@ namespace QuestLog.Infrastructure.Migrations
                     table.CheckConstraint("CK_Quest_GoldReward_Positive", "\"GoldReward\" >= 0");
                     table.CheckConstraint("CK_Quest_XPReward_Positive", "\"XPReward\" >= 0");
                     table.ForeignKey(
-                        name: "FK_Tasks_Avatars_OwnerAvatarId",
-                        column: x => x.OwnerAvatarId,
+                        name: "FK_Tasks_Avatars_AvatarId",
+                        column: x => x.AvatarId,
                         principalTable: "Avatars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -91,9 +91,9 @@ namespace QuestLog.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_OwnerAvatarId",
+                name: "IX_Tasks_AvatarId",
                 table: "Tasks",
-                column: "OwnerAvatarId");
+                column: "AvatarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
