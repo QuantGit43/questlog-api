@@ -3,6 +3,7 @@ using System.Security.Authentication;
 using System.Text.Json;
 using QuestLog.Api.Exceptions;
 using QuestLog.Application.Exceptions;
+using QuestLog.Domain.Exeptions;
 
 namespace QuestLog.Api.Middleware
 {
@@ -66,6 +67,16 @@ namespace QuestLog.Api.Middleware
                     message = "You are not authorized to access this resource.";
                     break;
                 
+                case InvalidUserException:
+                    status = StatusCodes.Status401Unauthorized;
+                    message = "Invalid user.";
+                    break;
+                
+                case InvalidPasswordException:
+                    status = StatusCodes.Status401Unauthorized;
+                    message = "Invalid password.";
+                    break;
+                
                 case InvalidOperationException ioex when ioex.Message.Contains("Access denied"):
                     status = StatusCodes.Status403Forbidden;
                     message = "You do not have permission to perform this action.";
@@ -104,6 +115,16 @@ namespace QuestLog.Api.Middleware
                 case InvalidCredentialException:
                     status = StatusCodes.Status409Conflict;
                     message = "Invalid credentials.";
+                    break;
+                
+                case CredentialsConflictException:
+                    status = StatusCodes.Status409Conflict;
+                    message = "Email or username already exists.";
+                    break; 
+                
+                case InvalidCredentialsException:
+                    status = StatusCodes.Status401Unauthorized;
+                    message = "Invalid email or password.";
                     break;
             }
 

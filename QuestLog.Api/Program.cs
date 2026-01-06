@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using FluentValidation;
 using QuestLog.Application.Common.Behaviors;
 using System.Text.Json.Serialization;
+using QuestLog.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +106,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IAiService, OpenRouterService>();
 
 var app = builder.Build();
 
