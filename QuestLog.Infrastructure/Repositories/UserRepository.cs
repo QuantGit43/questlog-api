@@ -30,4 +30,10 @@ public class UserRepository: Repository<User>, IUserRepository
             .Include(u => u.Avatar)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
+
+    public async Task<bool> IsEmailOrUsernameTakenAsync(string email, string username)
+    {
+        return await _context.Users.
+            AnyAsync(u => u.Email == email || u.Username == username);
+    }
 }

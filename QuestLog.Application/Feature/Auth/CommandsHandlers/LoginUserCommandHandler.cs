@@ -1,9 +1,10 @@
-﻿// В: QuestLog.Application/Features/Auth/LoginUserHandler.cs
-
-using MediatR;
+﻿using MediatR;
+using QuestLog.Application.Exceptions;
 using QuestLog.Application.Feature.Auth.Commands;
 using QuestLog.Domain.Exeptions;
 using QuestLog.Domain.Interfaces;
+
+namespace QuestLog.Application.Feature.Auth.CommandsHandlers;
 
 public class LoginUserHandler : IRequestHandler<LoginUserCommand, AuthResponse>
 {
@@ -27,13 +28,13 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, AuthResponse>
         var user = await _userRepository.GetByEmailAsync(request.Email);
         if (user == null)
         {
-            throw new Exception("Invalid email or password.");
+            throw new InvalidUserException("Invalid emmail.");
         }
 
         // 2. Перевірити пароль
         if (!_passwordHasher.Verify(user.PasswordHash, request.Password))
         {
-            throw new InvalidCredentialsException("Invalid email or password.");
+            throw new InvalidPasswordException("Invalid password.");
         }
 
         // 3. Згенерувати JWT токен

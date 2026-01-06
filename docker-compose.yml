@@ -10,6 +10,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=QuestLogDb;Username=postgres;Password=${POSTGRES_PASSWORD}
       - JwtSettings__Secret=${JWT_KEY}
+      - AiSettings__ApiKey=${OPENROUTER_API_KEY}
     depends_on:
       - postgres
 

@@ -2,7 +2,7 @@
 
 namespace QuestLog.Application.Feature.Auth.Commands;
 
-public class RegisterUserCommand : IRequest<Unit>
+public class RegisterUserCommand : IRequest<AuthResponse>
 {
     public string Username { get; set; }
     public string Email { get; set; }
