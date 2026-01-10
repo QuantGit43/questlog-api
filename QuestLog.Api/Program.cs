@@ -16,6 +16,12 @@ using QuestLog.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedOrigins = builder.Configuration["CorsSettings:AllowedOrigins"]?
+                         .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                         .Select(o => o.Trim())
+                         .ToArray() 
+                     ?? new[] { "http://localhost:3000" };
+
 var allowSpecificOrigins = "_allowSpecificOrigins";
 
 builder.Services.AddDbContext<QuestLogDbContext>(options =>
@@ -92,14 +98,17 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000")
+            policy
+                .WithOrigins(allowedOrigins)
                 .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .WithHeaders("Authorization", "Content-Type", "Accept");
+                .WithHeaders("Authorization", "Content-Type", "Accept")
+                .AllowCredentials();
         });
 });
 
@@ -108,19 +117,41 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IAiService, OpenRouterService>();
 
+
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<QuestLogDbContext>();
+        
+        // Ця команда перевіряє, чи є база. 
+        // Якщо немає — створює її. 
+        // Якщо є — накатує нові міграції.
+        context.Database.Migrate(); 
+        Console.WriteLine("Database migrated successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger(); 
     app.UseSwaggerUI(options => 
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "QuestLog API V1");
         options.RoutePrefix = string.Empty; 
     });
-}
+//}
 
 //app.UseHttpsRedirection();
 
