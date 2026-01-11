@@ -18,6 +18,7 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
         ITaskDifficultyEvaluator difficultyEvaluator,
         ILogger<CreateTaskCommandHandler> logger)
     {
+        _userContext = userContext;
         _unitOfWork = unitOfWork;
         _difficultyEvaluator = difficultyEvaluator;
         _logger = logger;
@@ -31,7 +32,7 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
         var difficulty = await _difficultyEvaluator.EvaluateAsync(request.Description ?? request.Title); 
             
         var task = new Task(
-            request.AvatarId,
+            currentAvatarId, 
             request.Title,
             request.Type,
             difficulty,
@@ -42,7 +43,7 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
 
         await _unitOfWork.Tasks.AddAsync(task);
         await _unitOfWork.CompleteAsync();
-        
+
         return task.Id;
     }
 }

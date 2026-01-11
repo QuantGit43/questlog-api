@@ -44,8 +44,8 @@ public class TaskController: ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskCommand command)
     {
-            await _sender.Send(command);
-            return Ok();
+        await _sender.Send(command);
+        return Ok();
     }
 
     [HttpDelete("{id:guid}")]
