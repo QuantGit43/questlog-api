@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using QuestLog.Domain.Enums;
 
 namespace QuestLog.Domain.Entities;
@@ -36,6 +37,7 @@ public class Task
     
     public DateTime? DueDate { get; private set; }
     
+    
     private Task() { }
     
     public Task(
@@ -47,7 +49,8 @@ public class Task
         int baseGoldReward = DefaultBaseGold,
         int baseXpReward = DefaultBaseXp,    
         DateTime? dueDate = null)
-    {
+        {
+            
         Id = Guid.NewGuid();
         OwnerAvatarId = ownerAvatarId;
         Title = title;
@@ -70,7 +73,6 @@ public class Task
         CreatedAt = DateTime.UtcNow;
         IsCompleted = false;
     }
-
     public void Complete()
     {
         if (!IsCompleted)

@@ -33,6 +33,7 @@ public class GetAllTasksQueryHandler: IRequestHandler<GetAllTasksQuery, IEnumera
             GoldReward = q.GoldReward,
             DueDate = q.DueDate,
             CreatedAt = q.CreatedAt,
+            AvatarId = q.OwnerAvatarId
         });
     }
 }

@@ -13,7 +13,6 @@ namespace QuestLog.Api.Controllers;
 public class TaskController: ControllerBase
 {
     private readonly ISender _sender;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     
     public TaskController(ISender sender)
     {
@@ -23,12 +22,6 @@ public class TaskController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
-        if (command.AvatarId == Guid.Empty) 
-        {
-            Console.WriteLine("AvatarId is Empty!");
-            throw new EmptyAvatarIdException("AvatarId is empty.");
-        }
-            
         var taskId = await _sender.Send(command);
         return Ok(new {TaskId = taskId});
     }
@@ -55,7 +48,7 @@ public class TaskController: ControllerBase
             return Ok();
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTask(Guid id)
     {
            var command = new DeleteTaskCommand { TaskId = id };

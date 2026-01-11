@@ -27,16 +27,6 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
     {
         _logger.LogInformation("Починаємо створення задачі.");
         
-        var avatarExists = await _unitOfWork.Avatars
-            .AnyAsync(a => a.Id == request.AvatarId, cancellationToken);       
-            if (!avatarExists)
-            {
-                throw new KeyNotFoundException($"Аватар з ID {request.AvatarId} не знайдений. Неможливо створити завдання.");
-            }
-            if (string.IsNullOrWhiteSpace(request.Title))
-            {
-                throw new ArgumentException("Заголовок завдання не може бути пустим.");
-            }
             
         var difficulty = await _difficultyEvaluator.EvaluateAsync(request.Description ?? request.Title); 
             

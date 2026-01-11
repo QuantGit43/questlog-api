@@ -30,7 +30,7 @@ public class GetTaskByAvatarQueryHandler : IRequestHandler<GetTaskByAvatarQuery,
             CreatedAt = q.CreatedAt,
             XPReward = q.XPReward,
             GoldReward = q.GoldReward,
-            DueDate = q.DueDate,
+            DueDate = q.DueDate
         });
     }
 }

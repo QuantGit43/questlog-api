@@ -70,13 +70,14 @@ public class Avatar
             HP = MaxHP;
         }
     }
-    public void ChangeName(string newName)
+    public void UpdateDetails(string name, AvatarClass avatarClass)
     {
-        if (string.IsNullOrWhiteSpace(newName) || newName.Length > 50)
-        {
-            throw new ArgumentException("The name cannot be empty or longer than 50 characters.\n");
-        }
-        Name = newName;
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Ім'я аватара не може бути порожнім.");
+            
+        if (name.Length > 50) 
+            throw new ArgumentException("Ім'я занадто довге.");
+        Class = avatarClass;
+        Name = name;
     }
-    
 }

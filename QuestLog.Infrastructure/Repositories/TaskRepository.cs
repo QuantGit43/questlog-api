@@ -2,6 +2,7 @@
 using QuestLog.Domain.Enums;
 using QuestLog.Domain.Interfaces;
 using QuestLog.Infrastructure.Data;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Task = QuestLog.Domain.Entities.Task;
 
 namespace QuestLog.Infrastructure.Repositories;
@@ -25,7 +26,7 @@ public class TaskRepository: Repository<Task>, ITaskRepository
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            query = query.Where(t => t.Title.ToLower().Contains(searchTerm.ToLower()));
+            query = query.Where(t => EF.Functions.ILike(t.Title, $"%{searchTerm}%"));
         }
 
         if (isCompleted.HasValue)

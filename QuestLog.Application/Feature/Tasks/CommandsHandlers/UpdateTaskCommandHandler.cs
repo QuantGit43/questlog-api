@@ -21,11 +21,7 @@ private readonly IUnitOfWork _unitOfWork;
         {
             throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
         }
-
-        if (quest.OwnerAvatarId != request.AvatarId)
-        {
-            throw new UnauthorizedAccessException("Це завдання вам не належить.");
-        }
+        
         quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward);
         
         if (request.IsCompleted && !quest.IsCompleted)
