@@ -6,6 +6,10 @@ namespace QuestLog.Domain.Entities;
 
 public class Task
 {
+    // Константи для дефолтних значень
+    private const int DefaultBaseXp = 100;
+    private const int DefaultBaseGold = 100;
+
     public Guid Id { get; private set; }
     
     [Required]
@@ -21,6 +25,7 @@ public class Task
     
     [Required]
     public TaskType Type { get; private set; }
+    public DifficultyLevel Difficulty { get; private set; }
     public bool IsCompleted { get; private set; }
     public DateTime CreatedAt { get; private set; }
     
@@ -35,20 +40,35 @@ public class Task
     
     private Task() { }
     
-    public Task(Guid avatarId, string title, TaskType type, int xpReward, int goldReward, string description = "", DateTime? dueDate = null)
-    {
-        if (xpReward < 0 || goldReward < 0)
+    public Task(
+        Guid ownerAvatarId, 
+        string title, 
+        TaskType type, 
+        DifficultyLevel difficultyLevel, 
+        string description = "", 
+        int baseGoldReward = DefaultBaseGold,
+        int baseXpReward = DefaultBaseXp,    
+        DateTime? dueDate = null)
         {
-            throw new ArgumentException("Awards cannot be negative.\n");
-        }
             
         Id = Guid.NewGuid();
         AvatarId = avatarId;
         Title = title;
         Type = type;
-        XPReward = xpReward;
-        GoldReward = goldReward;
         Description = description;
+        Difficulty = difficultyLevel;
+        
+        var multiplier = difficultyLevel switch
+        {
+            DifficultyLevel.Easy => 1,
+            DifficultyLevel.Medium => 2,
+            DifficultyLevel.Hard => 4,
+            _ => 2 //Дефолт, якщо прийде щось невідоме
+        };
+        
+        XPReward = baseXpReward * multiplier;
+        GoldReward = baseGoldReward * multiplier;
+
         DueDate = dueDate.HasValue ? DateTime.SpecifyKind(dueDate.Value, DateTimeKind.Utc) : null;
         CreatedAt = DateTime.UtcNow;
         IsCompleted = false;
@@ -60,15 +80,16 @@ public class Task
             IsCompleted = true;
         }
     }
-    public void UpdateDetails(string title, string description, int xpReward, int goldReward, bool requestIsCompleted)
+
+    public void UpdateDetails(string title, string description, int xpReward, int goldReward)
     {
         if (string.IsNullOrWhiteSpace(title) || title.Length > 100)
         {
-            throw new ArgumentException("The title cannot be empty or longer than 100 characters.\n");
+            throw new ArgumentException("The title cannot be empty or longer than 100 characters.", nameof(title));
         }
         if (xpReward < 0 || goldReward < 0)
         {
-            throw new ArgumentException("Awards cannot be negative.\n");
+            throw new ArgumentException("Awards cannot be negative.");
         }
 
         Title = title;

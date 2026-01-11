@@ -10,28 +10,28 @@ public class UpdateTaskCommandHandler: IRequestHandler<UpdateTaskCommand>
 private readonly IUnitOfWork _unitOfWork;
 private readonly IUserContext _userContext;
 
-public UpdateTaskCommandHandler(IUnitOfWork unitOfWork, IUserContext userContext)
-{
-    _userContext = userContext;
-    _unitOfWork = unitOfWork;
-}
-
-public async Task Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
-{
-    var quest = await _unitOfWork.Tasks.GetByIdAsync(request.TaskId);
-    if (quest == null)
+    public UpdateTaskCommandHandler(IUnitOfWork unitOfWork)
     {
-        throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
+        _unitOfWork = unitOfWork;
     }
 
-    if (quest.AvatarId != _userContext.AvatarId)
+    public async Task Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
-        throw new UnauthorizedAccessException("Це завдання вам не належить.");
-    }
-    
-    quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward, request.IsCompleted);
+        var quest = await _unitOfWork.Tasks.GetByIdAsync(request.TaskId);
+        if (quest == null)
+        {
+            throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
+        }
+        
+        quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward);
+        
+        if (request.IsCompleted && !quest.IsCompleted)
+        {
+            quest.Complete();
+        }
 
-    _unitOfWork.Tasks.Update(quest);
-    await _unitOfWork.CompleteAsync();
-}
+
+        _unitOfWork.Tasks.Update(quest);
+        await _unitOfWork.CompleteAsync();
+    }
 }

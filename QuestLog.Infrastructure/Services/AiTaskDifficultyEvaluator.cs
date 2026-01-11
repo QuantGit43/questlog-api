@@ -1,23 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using QuestLog.Application.Interfaces;
+﻿using QuestLog.Application.Interfaces;
+using QuestLog.Domain.Enums;
 
-namespace QuestLog.Api.Controllers;
+namespace QuestLog.Infrastructure.Services;
 
-[Authorize]
-[ApiController]
-[Route("api/[controller]")]
-public class TaskAnalysisController : ControllerBase
+public class AiTaskDifficultyEvaluator : ITaskDifficultyEvaluator
 {
     private readonly IAiService _aiService;
 
-    public TaskAnalysisController(IAiService aiService)
+    public AiTaskDifficultyEvaluator(IAiService aiService)
     {
         _aiService = aiService;
     }
-
-    [HttpPost("estimate-difficulty")]
-    public async Task<IActionResult> EstimateDifficulty([FromBody] string taskDescription)
+    
+    public async Task<DifficultyLevel> EvaluateAsync(string taskDescription)
     {
         var prompt = $@"
             Ти — помічник для управління задачами. 
@@ -28,9 +23,22 @@ public class TaskAnalysisController : ControllerBase
             Задача: ""{taskDescription}""
             Відповідай тільки одним словом (Easy, Medium або Hard). Не додавай пояснень.
         ";
-        var difficulty = await _aiService.GetAnswerAsync(prompt);
-        var cleanResult = difficulty.Trim().Replace(".", "");
 
-        return Ok(new { Task = taskDescription, Difficulty = cleanResult });
+        try
+        {
+            var response = await _aiService.GetAnswerAsync(prompt);
+            var cleanResponse = response.Trim().Replace(".", "");
+            
+            if (Enum.TryParse<DifficultyLevel>(cleanResponse, true, out var result))
+            {
+                return result;
+            }
+            
+            return DifficultyLevel.Medium;
+        }
+        catch
+        {
+            return DifficultyLevel.Medium;
+        }
     }
 }

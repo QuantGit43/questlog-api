@@ -1,15 +1,14 @@
 ﻿using MediatR;
 using QuestLog.Application.Dto;
 using QuestLog.Application.Feature.Tasks.Queries;
-using QuestLog.Application.Feature.Users.Queries;
 using QuestLog.Domain.Interfaces;
 
 namespace QuestLog.Application.Feature.Tasks.QueriesHandlers;
 
-public class GetTaskByAvatarQueryHandler: IRequestHandler<GetTaskByAvatarQuery, IEnumerable<TaskDto>>
+public class GetTaskByAvatarQueryHandler : IRequestHandler<GetTaskByAvatarQuery, IEnumerable<TaskDto>>
 {
     private readonly ITaskRepository _taskRepository;
-    
+
     public GetTaskByAvatarQueryHandler(ITaskRepository taskRepository)
     {
         _taskRepository = taskRepository;
@@ -22,15 +21,16 @@ public class GetTaskByAvatarQueryHandler: IRequestHandler<GetTaskByAvatarQuery, 
         return tasks.Select(q => new TaskDto
         {
             Id = q.Id,
+            AvatarId = q.OwnerAvatarId,
             Title = q.Title,
             Description = q.Description,
             Type = q.Type,
+            Difficulty = q.Difficulty,
             IsCompleted = q.IsCompleted,
+            CreatedAt = q.CreatedAt,
             XPReward = q.XPReward,
             GoldReward = q.GoldReward,
-            DueDate = q.DueDate,
-            AvatarId = q.AvatarId,
-            CreatedAt = q.CreatedAt
+            DueDate = q.DueDate
         });
     }
 }

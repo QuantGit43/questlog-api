@@ -22,8 +22,8 @@ public class TaskController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
-            var taskId = await _sender.Send(command);
-            return Ok(new {TaskId = taskId});
+        var taskId = await _sender.Send(command);
+        return Ok(new {TaskId = taskId});
     }
 
     [HttpGet("/api/avatars/{avatarId:guid}/tasks")]
@@ -48,7 +48,7 @@ public class TaskController: ControllerBase
         return Ok();
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTask(Guid id)
     {
            var command = new DeleteTaskCommand { TaskId = id };

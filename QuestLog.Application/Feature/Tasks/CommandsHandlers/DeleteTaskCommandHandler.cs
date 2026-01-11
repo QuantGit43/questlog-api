@@ -23,7 +23,7 @@ public class DeleteTaskCommandHandler: IRequestHandler<DeleteTaskCommand>
         {
             throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
         }
-        if (task.AvatarId != _userContext.AvatarId)
+        if (task.OwnerAvatarId != _userContext.AvatarId)
         {
             throw new UnauthorizedAccessException("Це завдання вам не належить.");
         }
