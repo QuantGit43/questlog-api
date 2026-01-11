@@ -33,7 +33,6 @@ private readonly IUnitOfWork _unitOfWork;
             quest.Complete();
         }
 
-
         _unitOfWork.Tasks.Update(quest);
         await _unitOfWork.CompleteAsync();
     }
