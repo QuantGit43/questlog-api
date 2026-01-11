@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using QuestLog.Application.Feature.Tasks.Commands;
 using QuestLog.Application.Feature.Users.Commands;
+using QuestLog.Application.Interfaces;
 using QuestLog.Domain.Interfaces;
 using Task = QuestLog.Domain.Entities.Task;
 
@@ -9,16 +11,24 @@ namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITaskDifficultyEvaluator _difficultyEvaluator;
+    private readonly ILogger<CreateTaskCommandHandler> _logger;
     
-    public CreateTaskCommandHandler(IUnitOfWork unitOfWork)
+    public CreateTaskCommandHandler(IUnitOfWork unitOfWork,
+        ITaskDifficultyEvaluator difficultyEvaluator,
+        ILogger<CreateTaskCommandHandler> logger)
     {
         _unitOfWork = unitOfWork;
+        _difficultyEvaluator = difficultyEvaluator;
+        _logger = logger;
     }
 
     public async Task<Guid> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Починаємо створення задачі.");
+        
         var avatarExists = await _unitOfWork.Avatars
-            .AnyAsync(a => a.Id == request.AvatarId);       
+            .AnyAsync(a => a.Id == request.AvatarId, cancellationToken);       
             if (!avatarExists)
             {
                 throw new KeyNotFoundException($"Аватар з ID {request.AvatarId} не знайдений. Неможливо створити завдання.");
@@ -27,15 +37,18 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Guid>
             {
                 throw new ArgumentException("Заголовок завдання не може бути пустим.");
             }
+            
+        var difficulty = await _difficultyEvaluator.EvaluateAsync(request.Description ?? request.Title); 
+            
         var task = new Task(
             request.AvatarId,
             request.Title,
             request.Type,
-            request.XPReward,
-            request.GoldReward,
+            difficulty,
             request.Description,
-            request.DueDate
+            dueDate: request.DueDate
         );
+    
 
         await _unitOfWork.Tasks.AddAsync(task);
         await _unitOfWork.CompleteAsync();

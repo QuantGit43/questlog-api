@@ -116,7 +116,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IAiService, OpenRouterService>();
-
+builder.Services.AddScoped<ITaskDifficultyEvaluator, AiTaskDifficultyEvaluator>();
 
 
 var app = builder.Build();
