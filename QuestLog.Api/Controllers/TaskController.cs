@@ -13,7 +13,6 @@ namespace QuestLog.Api.Controllers;
 public class TaskController: ControllerBase
 {
     private readonly ISender _sender;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     
     public TaskController(ISender sender)
     {
