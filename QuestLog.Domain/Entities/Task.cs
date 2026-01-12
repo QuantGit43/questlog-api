@@ -13,7 +13,7 @@ public class Task
     public Guid Id { get; private set; }
     
     [Required]
-    public Guid OwnerAvatarId { get; private set; }
+    public Guid AvatarId { get; private set; }
     public virtual Avatar Avatar { get; private set; }
 
     [Required]
@@ -52,7 +52,7 @@ public class Task
         {
             
         Id = Guid.NewGuid();
-        OwnerAvatarId = ownerAvatarId;
+        AvatarId = avatarId;
         Title = title;
         Type = type;
         Description = description;

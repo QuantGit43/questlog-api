@@ -17,6 +17,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
         ITaskDifficultyEvaluator difficultyEvaluator,
         ILogger<CreateTaskCommandHandler> logger)
     {
+        _userContext = userContext;
         _unitOfWork = unitOfWork;
         _difficultyEvaluator = difficultyEvaluator;
         _logger = logger;

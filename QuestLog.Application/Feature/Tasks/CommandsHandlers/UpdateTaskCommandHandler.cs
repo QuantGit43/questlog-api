@@ -8,6 +8,7 @@ namespace QuestLog.Application.Feature.Tasks.CommandsHandlers;
 public class UpdateTaskCommandHandler: IRequestHandler<UpdateTaskCommand>
 {
 private readonly IUnitOfWork _unitOfWork;
+private readonly IUserContext _userContext;
 
     public UpdateTaskCommandHandler(IUnitOfWork unitOfWork)
     {

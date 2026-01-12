@@ -61,8 +61,6 @@ public class TaskController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskCommand command)
     {
-        // Тут також бажано додати перевірку, чи належить це завдання цьому юзеру,
-        // але це можна зробити пізніше в хендлері.
         await _sender.Send(command);
         return Ok();
     }
