@@ -61,10 +61,11 @@ namespace QuestLog.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AvatarId = table.Column<Guid>(type: "uuid", nullable: false),
+                    OwnerAvatarId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
+                    Difficulty = table.Column<int>(type: "integer", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     XPReward = table.Column<int>(type: "integer", nullable: false),
@@ -77,8 +78,8 @@ namespace QuestLog.Infrastructure.Migrations
                     table.CheckConstraint("CK_Quest_GoldReward_Positive", "\"GoldReward\" >= 0");
                     table.CheckConstraint("CK_Quest_XPReward_Positive", "\"XPReward\" >= 0");
                     table.ForeignKey(
-                        name: "FK_Tasks_Avatars_AvatarId",
-                        column: x => x.AvatarId,
+                        name: "FK_Tasks_Avatars_OwnerAvatarId",
+                        column: x => x.OwnerAvatarId,
                         principalTable: "Avatars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -91,9 +92,9 @@ namespace QuestLog.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_AvatarId",
+                name: "IX_Tasks_OwnerAvatarId",
                 table: "Tasks",
-                column: "AvatarId");
+                column: "OwnerAvatarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

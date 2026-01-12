@@ -17,7 +17,7 @@ public class GetTaskByAvatarQueryHandler : IRequestHandler<GetTaskByAvatarQuery,
     public async Task<IEnumerable<TaskDto>> Handle(GetTaskByAvatarQuery request, CancellationToken cancellationToken)
     {
         var tasks = await _taskRepository.GetTasksByAvatarIdAsync(request.AvatarId);
-
+        
         return tasks.Select(q => new TaskDto
         {
             Id = q.Id,
@@ -27,10 +27,10 @@ public class GetTaskByAvatarQueryHandler : IRequestHandler<GetTaskByAvatarQuery,
             Type = q.Type,
             Difficulty = q.Difficulty,
             IsCompleted = q.IsCompleted,
-            CreatedAt = q.CreatedAt,
-            XPReward = q.XPReward,
+            CreatedAt = q.CreatedAt, 
+            XPReward = q.XPReward,     
             GoldReward = q.GoldReward,
-            DueDate = q.DueDate
+            DueDate = q.DueDate,
         });
     }
 }
