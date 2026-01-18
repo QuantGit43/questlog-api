@@ -19,15 +19,13 @@ public class UpdateUserCommandHandler: IRequestHandler<UpdateUserCommand>
     public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
-
-        
         
         if (user == null)
         {
             throw new KeyNotFoundException($"Користувача з ID {request.UserId} не знайдено.");
         }
         
-        if (user.Id != _userContext.UserId)
+        if (user.Id != _userContext.UserId && !_userContext.IsAdmin)
         {
             throw new UnauthorizedAccessException("Ви не можете редагувати профіль іншого користувача.");
         }

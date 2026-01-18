@@ -24,20 +24,6 @@ public class TaskController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
-        // 1. Витягуємо ID поточного користувача з JWT токена
-        // Це гарантує, що завдання створюється саме для того, хто залогінився
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(userIdString))
-        {
-            return Unauthorized();
-        }
-
-        // 2. Передаємо цей ID в команду
-        // (Переконайтеся, що ви додали властивість UserId до класу CreateTaskCommand)
-        command.UserId = Guid.Parse(userIdString);
-
-        // 3. Відправляємо команду. AvatarId тепер знайдеться всередині хендлера автоматично.
         var taskId = await _sender.Send(command);
         
         return Ok(new { TaskId = taskId });

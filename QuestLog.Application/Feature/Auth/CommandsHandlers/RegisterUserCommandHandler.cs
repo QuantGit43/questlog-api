@@ -34,7 +34,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, AuthResp
         {
             throw new CredentialsConflictException("Email or username already exists.");
         }
-
+        
         var passwordHash = _passwordHasher.Hash(request.Password);
 
         var avatar = new Avatar(request.Username, AvatarClass.Warrior); // Warrior is default avatar
@@ -46,7 +46,14 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, AuthResp
         );
         
         var token = _jwtTokenGenerator.GenerateToken(user);
-
+        
+        // Якщо уе перший користувач він АВТОМАТИЧНО отримує права АДМІНА
+        bool isFirstUser = !(await _unitOfWork.Users.AnyAsync(u => true));
+        if (isFirstUser)
+        {
+            user.PromoteToAdmin();
+        }
+        
         await _userRepository.AddAsync(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -54,7 +61,8 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, AuthResp
         {
             UserId = user.Id.ToString(),
             Username = user.Username,
-            Token = token
+            Token = token,
+            Role = user.Role.ToString()
         };
     }
 }

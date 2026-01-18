@@ -17,21 +17,24 @@ private readonly IUserContext _userContext;
 
     public async Task Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
-        var quest = await _unitOfWork.Tasks.GetByIdAsync(request.TaskId);
-        if (quest == null)
+        var task = await _unitOfWork.Tasks.GetByIdAsync(request.TaskId);
+        if (task == null)
         {
             throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
         }
-        
-        quest.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward);
-        
-        if (request.IsCompleted && !quest.IsCompleted)
+        if (task.AvatarId != _userContext.AvatarId && !_userContext.IsAdmin)
         {
-            quest.Complete();
+            throw new UnauthorizedAccessException("Це завдання вам не належить.");
+        }
+        task.UpdateDetails(request.Title, request.Description, request.XPReward, request.GoldReward);
+        
+        if (request.IsCompleted && !task.IsCompleted)
+        {
+            task.Complete();
         }
 
 
-        _unitOfWork.Tasks.Update(quest);
+        _unitOfWork.Tasks.Update(task);
         await _unitOfWork.CompleteAsync();
     }
 }

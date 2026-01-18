@@ -26,7 +26,7 @@ public class GetTaskByIdQueryHandler : IRequestHandler<GetTaskByIdQuery, TaskDto
         return new TaskDto
         {
             Id = task.Id,
-            AvatarId = task.OwnerAvatarId, 
+            AvatarId = task.AvatarId, 
             Title = task.Title,
             Description = task.Description,
             Type = task.Type,

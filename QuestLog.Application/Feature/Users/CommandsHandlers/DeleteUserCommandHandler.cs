@@ -23,7 +23,7 @@ public class DeleteUserCommandHandler: IRequestHandler<DeleteUserCommand>
             throw new KeyNotFoundException($"Користувача з ID {request.UserId} не знайдено.");
         }
         
-        if (user.Id != _userContext.UserId)
+        if (user.Id != _userContext.UserId && !_userContext.IsAdmin)
         {
             throw new UnauthorizedAccessException("Ви не можете видалити акаунт іншого користувача.");
         }

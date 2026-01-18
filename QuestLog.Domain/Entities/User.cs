@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using QuestLog.Domain.Enums;
 
 namespace QuestLog.Domain.Entities;
 
@@ -22,6 +23,8 @@ public class User
     public virtual Avatar? Avatar { get; private set; }
     
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    
+    public UserRole Role { get; private set; } = UserRole.User;
     
     protected User() {}
 
@@ -49,5 +52,9 @@ public class User
 
         Username = username;
         Email = email;
+    }
+    public void PromoteToAdmin()
+    {
+        Role = UserRole.Admin;
     }
 }
