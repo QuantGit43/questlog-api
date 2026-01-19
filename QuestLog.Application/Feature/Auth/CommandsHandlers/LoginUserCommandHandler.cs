@@ -45,7 +45,8 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, AuthResponse>
         {
             UserId = user.Id.ToString(),
             Username = user.Username,
-            Token = token
+            Token = token,
+            Role = user.Role.ToString()
         };
     }
 }

@@ -41,7 +41,7 @@ public class Task
     private Task() { }
     
     public Task(
-        Guid ownerAvatarId, 
+        Guid avatarId, 
         string title, 
         TaskType type, 
         DifficultyLevel difficultyLevel, 

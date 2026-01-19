@@ -23,7 +23,7 @@ public class UpdateAvatarCommandHandler: IRequestHandler<UpdateAvatarCommand>
         {
             throw new KeyNotFoundException($"Аватар з ID {request.AvatarId} не знайдений.");
         }
-        if (request.AvatarId != _userContext.AvatarId)
+        if (request.AvatarId != _userContext.AvatarId && !_userContext.IsAdmin)
         {
             throw new UnauthorizedAccessException("Ви не можете редагувати чужого аватара.");
         }

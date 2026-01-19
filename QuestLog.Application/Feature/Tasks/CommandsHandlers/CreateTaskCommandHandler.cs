@@ -12,8 +12,9 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITaskDifficultyEvaluator _difficultyEvaluator;
     private readonly ILogger<CreateTaskCommandHandler> _logger;
+    private readonly IUserContext _userContext;
 
-    public CreateTaskCommandHandler(IUnitOfWork unitOfWork,
+    public CreateTaskCommandHandler(IUnitOfWork unitOfWork, IUserContext userContext,
         ITaskDifficultyEvaluator difficultyEvaluator,
         ILogger<CreateTaskCommandHandler> logger)
     {
@@ -25,12 +26,14 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
 
     public async Task<Guid> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        var avatar = await _unitOfWork.Avatars.GetByUserIdAsync(request.UserId);
+        var currentUserId = _userContext.UserId;
+        
+        var avatar = await _unitOfWork.Avatars.GetByUserIdAsync(currentUserId);
 
         if (avatar == null)
         {
-            _logger.LogError($"Avatar not found for UserID: {request.UserId}");
-            throw new KeyNotFoundException($"Аватар для користувача {request.UserId} не знайдений.");
+            _logger.LogError($"Avatar not found for UserID: {currentUserId}");
+            throw new KeyNotFoundException($"Аватар для користувача {currentUserId} не знайдений.");
         }
 
         var difficulty = await _difficultyEvaluator.EvaluateAsync(request.Description ?? request.Title);

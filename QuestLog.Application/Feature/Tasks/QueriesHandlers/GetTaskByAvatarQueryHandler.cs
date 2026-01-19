@@ -21,7 +21,7 @@ public class GetTaskByAvatarQueryHandler : IRequestHandler<GetTaskByAvatarQuery,
         return tasks.Select(q => new TaskDto
         {
             Id = q.Id,
-            AvatarId = q.OwnerAvatarId,
+            AvatarId = q.AvatarId,
             Title = q.Title,
             Description = q.Description,
             Type = q.Type,
