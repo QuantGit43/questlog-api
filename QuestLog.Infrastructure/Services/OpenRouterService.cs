@@ -1,8 +1,8 @@
-﻿using QuestLog.Application.Interfaces;
+﻿using System.ClientModel;
+using Microsoft.Extensions.Configuration;
 using OpenAI;
 using OpenAI.Chat;
-using Microsoft.Extensions.Configuration;
-using System.ClientModel; // Потрібно для ApiKeyCredential
+using QuestLog.Application.Interfaces; // Потрібно для ApiKeyCredential
 
 namespace QuestLog.Infrastructure.Services
 {

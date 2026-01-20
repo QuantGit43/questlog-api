@@ -1,18 +1,18 @@
+using System.Text;
+using System.Text.Json.Serialization;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using QuestLog.Api.Middleware;
+using QuestLog.Application.Common.Behaviors;
 using QuestLog.Application.Feature.Users.Commands;
+using QuestLog.Application.Interfaces;
 using QuestLog.Domain.Interfaces;
 using QuestLog.Infrastructure.Data;
 using QuestLog.Infrastructure.Repositories;
 using QuestLog.Infrastructure.Services;
-using QuestLog.Api.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
-using FluentValidation;
-using QuestLog.Application.Common.Behaviors;
-using System.Text.Json.Serialization;
-using QuestLog.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

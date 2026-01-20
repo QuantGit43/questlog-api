@@ -28,10 +28,10 @@ public class AvatarController: ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAvatars()
+    public async Task<IActionResult> GetAll([FromQuery] GetAllAvatarsQuery query)
     {
-          var avatars = await _sender.Send(new GetAllAvatarsQuery());
-          return Ok(avatars);
+        var result = await _sender.Send(query);
+        return Ok(result);
     }
 
     [HttpPut]

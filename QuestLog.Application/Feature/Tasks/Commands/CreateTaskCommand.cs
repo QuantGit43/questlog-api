@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using System.Text.Json.Serialization;
+using MediatR;
 using QuestLog.Domain.Enums;
-using System.Text.Json.Serialization;
 
 namespace QuestLog.Application.Feature.Tasks.Commands;
 

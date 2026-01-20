@@ -60,4 +60,9 @@ public class Repository<T> : IRepository<T> where T : class
     {
         return await _entities.AnyAsync(predicate, cancellationToken);
     }
+
+    public IQueryable<T> GetQueryable()
+    {
+        return _entities.AsNoTracking();
+    }
 }

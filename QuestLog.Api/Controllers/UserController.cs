@@ -34,10 +34,11 @@ namespace QuestLog.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQuery query)
         {
-                return Ok(await _sender.Send(new GetAllUsersQuery()));
-        }
+            var result = await _sender.Send(query);
+            return Ok(result);        }
 
         [HttpDelete(("{id:guid}"))]
         public async Task<IActionResult> DeleteUser(Guid id)
