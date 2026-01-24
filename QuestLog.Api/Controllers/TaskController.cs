@@ -30,9 +30,15 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet("/api/avatars/{avatarId:guid}/tasks")]
-    public async Task<IActionResult> GetTasksForAvatar(Guid avatarId)
+    public async Task<IActionResult> GetTasksForAvatar(Guid avatarId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var query = new GetTaskByAvatarQuery { AvatarId = avatarId };
+        var query = new GetTaskByAvatarQuery 
+        { 
+            AvatarId = avatarId,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+        
         var tasks = await _sender.Send(query);
         return Ok(tasks);
     }

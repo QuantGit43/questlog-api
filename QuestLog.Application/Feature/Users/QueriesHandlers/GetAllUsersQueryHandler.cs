@@ -1,39 +1,44 @@
 ﻿using MediatR;
+using QuestLog.Application.Common.Extensions; 
+using QuestLog.Application.Common.Models;    
 using QuestLog.Application.Dto;
 using QuestLog.Application.Feature.Users.Queries;
+using QuestLog.Domain.Enums; 
 using QuestLog.Domain.Interfaces;
 
 namespace QuestLog.Application.Feature.Users.QueriesHandlers;
 
-public class GetAllUsersQueryHandler: IRequestHandler<GetAllUsersQuery, IEnumerable<UserDto>>
+public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedList<UserDto>>
 {
-    private readonly IUserRepository _userRepository;
-    
+    private readonly IUserRepository _userRepository; 
+
     public GetAllUsersQueryHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
 
-    public async Task<IEnumerable<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<PagedList<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _userRepository.GetAllAsync();
-        var userDtos = new List<UserDto>();
-        foreach (var user in users)
-        {
-            var userWithAvatar = await _userRepository.GetByIdAsync(user.Id);
-            if (userWithAvatar != null)
-            {
-                if (userWithAvatar.Avatar != null)
-                    userDtos.Add(new UserDto
-                    {
-                        Id = userWithAvatar.Id,
-                        Username = userWithAvatar.Username,
-                        Email = userWithAvatar.Email,
-                        AvatarId = userWithAvatar.Avatar.Id,
-                    });
-            }
-        }
+        var query = _userRepository.GetQueryable();
 
-        return userDtos;
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            var term = request.SearchTerm.ToLower();
+            query = query.Where(u => 
+                u.Email.ToLower().Contains(term) || 
+                u.Username.ToLower().Contains(term));
+        }
+        
+        query = query.OrderBy(u => u.Username);
+
+        var dtoQuery = query.Select(u => new UserDto
+        {
+            Id = u.Id,
+            Username = u.Username,
+            Email = u.Email,
+            AvatarId = u.Avatar != null ? u.Avatar.Id : Guid.Empty 
+        });
+
+        return await dtoQuery.ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

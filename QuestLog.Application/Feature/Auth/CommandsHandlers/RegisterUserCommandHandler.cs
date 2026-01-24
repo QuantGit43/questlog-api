@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using QuestLog.Application.Exceptions;
+using QuestLog.Application.Exceptions;
 using QuestLog.Application.Feature.Auth.Commands;
 using QuestLog.Domain.Entities;
 using QuestLog.Domain.Enums;
-using QuestLog.Domain.Exeptions;
 using QuestLog.Domain.Interfaces;
-using QuestLog.Application.Exceptions;
 
 namespace QuestLog.Application.Feature.Auth.CommandsHandlers;
 

@@ -1,10 +1,10 @@
-﻿using QuestLog.Domain.Interfaces;
-using QuestLog.Domain.Entities;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using QuestLog.Domain.Entities;
+using QuestLog.Domain.Interfaces;
 using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace QuestLog.Infrastructure.Services

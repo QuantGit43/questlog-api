@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using QuestLog.Application.Exceptions;
 using QuestLog.Application.Feature.Auth.Commands;
-using QuestLog.Domain.Exeptions;
 using QuestLog.Domain.Interfaces;
 
 namespace QuestLog.Application.Feature.Auth.CommandsHandlers;
