@@ -25,8 +25,23 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
         var taskId = await _sender.Send(command);
-        
-        return Ok(new { TaskId = taskId });
+    
+        // Треба отримати створене завдання, щоб повернути його фронту
+        var query = new GetTaskByIdQuery { TaskId = taskId };
+        var createdTask = await _sender.Send(query);
+
+        return CreatedAtAction(nameof(GetTaskById), new { taskId = taskId }, createdTask);
+    }
+    
+    [HttpPost("analyze-complexity")]
+    public async Task<IActionResult> AnalyzeComplexity([FromBody] AnalyzeComplexityRequest request)
+    {
+        // Конвертуємо request від фронта в Query для MediatR
+        var query = new AnalyzeTaskComplexityQuery(request.Title, request.Description);
+    
+        var result = await _sender.Send(query);
+    
+        return Ok(result);
     }
 
     [HttpGet("/api/avatars/{avatarId:guid}/tasks")]
@@ -72,3 +87,6 @@ public class TaskController : ControllerBase
         return Ok(tasks);
     }
 }
+
+//DTO для вхідного JSON 
+public record AnalyzeComplexityRequest(string Title, string? Description);
