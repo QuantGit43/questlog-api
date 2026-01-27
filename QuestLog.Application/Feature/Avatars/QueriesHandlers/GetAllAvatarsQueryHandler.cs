@@ -38,7 +38,11 @@ public class GetAllAvatarsQueryHandler : IRequestHandler<GetAllAvatarsQuery, Pag
             UserId = a.UserId,
             MaxHP = a.MaxHP,
             HP = a.HP,
-            Gold = a.Gold
+            Gold = a.Gold,
+            Strength = a.Strength,
+            Intellect = a.Intellect,
+            Dexterity = a.Dexterity,
+            Wisdom = a.Wisdom
         });
 
         return await dtoQuery.ToPagedListAsync(request.PageNumber, request.PageSize);

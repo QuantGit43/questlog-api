@@ -10,14 +10,16 @@ public class UpdateTaskCommandHandler: IRequestHandler<UpdateTaskCommand>
 private readonly IUnitOfWork _unitOfWork;
 private readonly IUserContext _userContext;
 
-    public UpdateTaskCommandHandler(IUnitOfWork unitOfWork)
+    public UpdateTaskCommandHandler(IUnitOfWork unitOfWork, IUserContext userContext)
     {
         _unitOfWork = unitOfWork;
+        _userContext = userContext;
     }
 
     public async Task Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
         var task = await _unitOfWork.Tasks.GetByIdAsync(request.TaskId);
+        var avatar = await _unitOfWork.Avatars.GetByIdAsync(task.AvatarId);
         if (task == null)
         {
             throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
@@ -30,7 +32,7 @@ private readonly IUserContext _userContext;
         
         if (request.IsCompleted && !task.IsCompleted)
         {
-            task.Complete();
+            task.Complete(avatar);
         }
 
 

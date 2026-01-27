@@ -13,4 +13,9 @@ public class AvatarDto
     public int HP { get; set; }
     public int MaxHP { get; set; }
     public int Gold { get; set; }
+    
+    public int Strength { get; set; }
+    public int Intellect { get; set; }
+    public int Dexterity { get; set; }
+    public int Wisdom { get; set; }
 }

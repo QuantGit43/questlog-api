@@ -37,17 +37,18 @@ public class Task
     
     public DateTime? DueDate { get; private set; }
     
+    public TaskCategory Category { get; private set; }
     
     private Task() { }
     
-    public Task(
-        Guid avatarId, 
-        string title, 
-        TaskType type, 
-        DifficultyLevel difficultyLevel, 
-        string description = "", 
+    public Task(Guid avatarId,
+        string title,
+        TaskType type,
+        DifficultyLevel difficultyLevel,
+        TaskCategory category ,
+        string? description = "",
         int baseGoldReward = DefaultBaseGold,
-        int baseXpReward = DefaultBaseXp,    
+        int baseXpReward = DefaultBaseXp,
         DateTime? dueDate = null)
         {
             
@@ -72,13 +73,35 @@ public class Task
         DueDate = dueDate.HasValue ? DateTime.SpecifyKind(dueDate.Value, DateTimeKind.Utc) : null;
         CreatedAt = DateTime.UtcNow;
         IsCompleted = false;
+        Category = category;
     }
-    public void Complete()
+    public (int xp, int gold) Complete(Avatar? avatar)
     {
-        if (!IsCompleted)
+        if (IsCompleted)
         {
-            IsCompleted = true;
+            throw new InvalidOperationException("Task is already completed.");
         }
+        if (avatar.Id != AvatarId)
+        {
+            throw new InvalidOperationException("Avatar does not own this task.");
+        }
+        int relevantStat = avatar.GetStatValue(this.Category);
+
+        double multiplier = 1.0 + (relevantStat / 100.0);
+        
+        double calculatedXp = this.XPReward * multiplier;
+        
+        int finalXp = (int)Math.Round(calculatedXp, MidpointRounding.AwayFromZero);
+        
+        int finalGold = this.GoldReward;
+        
+        avatar.GainResources(finalXp, finalGold);
+        
+        avatar.TrainStat(this.Category);
+        
+        IsCompleted = true;
+        
+        return (finalXp, finalGold);
     }
 
     public void UpdateDetails(string title, string description, int xpReward, int goldReward)

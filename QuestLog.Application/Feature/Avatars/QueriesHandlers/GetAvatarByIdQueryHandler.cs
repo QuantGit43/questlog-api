@@ -33,6 +33,10 @@ public class GetAvatarByIdQueryHandler : IRequestHandler<GetAvatarByIdQuery, Ava
       HP = avatar.HP,
       MaxHP = avatar.MaxHP,
       Gold = avatar.Gold,
+      Strength = avatar.Strength,
+      Intellect = avatar.Intellect,
+      Dexterity = avatar.Dexterity,
+      Wisdom = avatar.Wisdom
     };
   }
   

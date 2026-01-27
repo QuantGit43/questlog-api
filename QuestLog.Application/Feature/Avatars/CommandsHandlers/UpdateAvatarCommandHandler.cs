@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using QuestLog.Application.Feature.Avatars.Commands;
+using QuestLog.Domain.Config;
 using QuestLog.Domain.Interfaces;
 
 namespace QuestLog.Application.Feature.Avatars.CommandsHandlers;
@@ -27,7 +28,20 @@ public class UpdateAvatarCommandHandler: IRequestHandler<UpdateAvatarCommand>
         {
             throw new UnauthorizedAccessException("Ви не можете редагувати чужого аватара.");
         }
-        avatar.UpdateDetails(request.Name, request.Class);
+        
+        if (!ClassDefinitions.Stats.TryGetValue(request.Class, out var stats))
+        {
+            stats = new ClassStats { MaxHp = 100, Strength = 5, Intellect = 5, Dexterity = 5, Wisdom = 5 };
+        }
+        avatar.ChooseClass(
+            request.Name,
+            request.Class,
+            stats.MaxHp,
+            stats.Strength,
+            stats.Intellect,
+            stats.Dexterity,
+            stats.Wisdom
+        );
         
         _unitOfWork.Avatars.Update(avatar);
         await _unitOfWork.CompleteAsync();
