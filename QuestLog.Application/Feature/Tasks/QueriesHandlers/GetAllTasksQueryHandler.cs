@@ -61,6 +61,8 @@ public class GetAllTasksQueryHandler : IRequestHandler<GetAllTasksQuery, PagedLi
             GoldReward = t.GoldReward,
             DueDate = t.DueDate,
             CreatedAt = t.CreatedAt, 
+            Difficulty = t.Difficulty,
+            Category = t.Category,
             AvatarId = t.AvatarId
         });
 

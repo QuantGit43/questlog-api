@@ -14,17 +14,19 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, AuthResp
     private readonly IPasswordHasher _passwordHasher; 
     private readonly IUnitOfWork _unitOfWork;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IUserContext _userContext;
 
     public RegisterUserHandler(
         IUserRepository userRepository, 
         IPasswordHasher passwordHasher, 
         IUnitOfWork unitOfWork,
-        IJwtTokenGenerator jwtTokenGenerator)
+        IJwtTokenGenerator jwtTokenGenerator, IUserContext userContext)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _unitOfWork = unitOfWork;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _userContext = userContext;
     }
 
     public async Task<AuthResponse> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -36,7 +38,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, AuthResp
         
         var passwordHash = _passwordHasher.Hash(request.Password);
 
-        var avatar = new Avatar(request.Username, AvatarClass.Warrior); // Warrior is default avatar
+        var avatar = new Avatar(_userContext.UserId); 
         var user = new User(
             request.Username,
             request.Email,

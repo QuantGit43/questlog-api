@@ -31,6 +31,7 @@ public class GetTasksByAvatarQueryHandler : IRequestHandler<GetTaskByAvatarQuery
             Description = t.Description,
             Type = t.Type,
             Difficulty = t.Difficulty,
+            Category = t.Category,
             IsCompleted = t.IsCompleted,
             CreatedAt = t.CreatedAt,
             XPReward = t.XPReward,

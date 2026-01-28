@@ -49,6 +49,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
             request.Title,
             request.Type,
             difficulty,
+            request.Category,
             request.Description,
             xp,
             gold,

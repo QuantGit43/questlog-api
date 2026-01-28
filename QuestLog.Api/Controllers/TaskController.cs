@@ -86,6 +86,14 @@ public class TaskController : ControllerBase
         var tasks = await _sender.Send(query);
         return Ok(tasks);
     }
+    
+    [HttpPost("{id}/complete")]
+    public async Task<IActionResult> Complete(Guid id)
+    {
+        var result = await _sender.Send(new CompleteTaskCommand { TaskId = id });
+    
+        return Ok(result);
+    }
 }
 
 //DTO для вхідного JSON 
