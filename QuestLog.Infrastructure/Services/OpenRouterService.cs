@@ -60,7 +60,7 @@ namespace QuestLog.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OpenRouterService] API call failed: {Message}", ex.Message);
-                throw; // Перекидаємо далі, щоб AiTaskDifficultyEvaluator міг обробити
+                throw; // Перекидаємо далі, щоб AiTaskAnalyser міг обробити
             }
         }
     }
