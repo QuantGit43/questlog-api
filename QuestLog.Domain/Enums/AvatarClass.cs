@@ -2,8 +2,8 @@
 
 public enum AvatarClass
 {
-    Warrior,
-    Mage,
-    Healer,
-    Crafter
+    Warrior = 0,
+    Mage = 1,
+    Healer = 2,
+    Crafter = 3
 }

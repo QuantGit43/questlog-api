@@ -18,6 +18,16 @@ public class AvatarController: ControllerBase
     {
         _sender = sender;
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateAvatarCommand command)
+    {
+        // Медіатр знайде CreateAvatarCommandHandler і виконає його
+        var avatarId = await _sender.Send(command);
+        
+        // Повертаємо ID створеного аватара
+        return Ok(new { AvatarId = avatarId });
+    }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetAvatarById(Guid id)

@@ -32,6 +32,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.Converters.Add(new EmptyStringToNullDateConverter());
     });
 
 builder.Services.AddAuthentication(options =>
@@ -65,6 +66,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommand).Assembly);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>(); 
 builder.Services.AddScoped<IAvatarRepository, AvatarRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
