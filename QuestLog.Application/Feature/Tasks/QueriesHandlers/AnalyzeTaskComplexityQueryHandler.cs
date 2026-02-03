@@ -17,16 +17,12 @@ public class AnalyzeTaskComplexityHandler : IRequestHandler<AnalyzeTaskComplexit
 
     public async Task<TaskComplexityDto> Handle(AnalyzeTaskComplexityQuery request, CancellationToken cancellationToken)
     {
-        // 1. Формуємо текст для AI (з'єднуємо заголовок і опис)
         var textToAnalyze = string.IsNullOrWhiteSpace(request.Description) 
             ? request.Title 
             : $"{request.Title}. {request.Description}";
 
-        // 2. Викликаємо твій існуючий сервіс
         var difficulty = await _evaluator.EvaluateAsync(textToAnalyze);
 
-        // 3. Розраховуємо нагороди (Game Balance Logic)
-        // Це найкраще місце для цієї логіки, щоб вона була в одному місці
         var (xp, gold) = difficulty switch
         {
             DifficultyLevel.Easy => (10, 5),
@@ -35,7 +31,6 @@ public class AnalyzeTaskComplexityHandler : IRequestHandler<AnalyzeTaskComplexit
             _ => (10, 5)
         };
 
-        // 4. Повертаємо результат
         return new TaskComplexityDto
         {
             Difficulty = difficulty.ToString(),

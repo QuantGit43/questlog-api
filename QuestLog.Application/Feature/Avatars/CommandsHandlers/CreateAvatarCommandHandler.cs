@@ -26,12 +26,6 @@ public class CreateAvatarCommandHandler : IRequestHandler<CreateAvatarCommand, G
     public async Task<Guid> Handle(CreateAvatarCommand request, CancellationToken cancellationToken)
     {
         var userId = _userContext.UserId;
-
-        // --- 1. ПЕРЕВІРКА: ЧИ ВЖЕ Є АВАТАР? ---
-        // Нам потрібно знайти аватара по UserId.
-        // Якщо у твого Generic Repository немає методу GetByUserId, 
-        // можна використати доступ через UnitOfWork (якщо він дає доступ до DbSet)
-        // або додати метод в репозиторій.
         
         var existingAvatar = await _unitOfWork.Avatars.GetByUserIdAsync(userId);
 
@@ -39,8 +33,7 @@ public class CreateAvatarCommandHandler : IRequestHandler<CreateAvatarCommand, G
         {
             return existingAvatar.Id;
         }
-
-        // --- 2. СТВОРЕННЯ НОВОГО (Якщо не знайдено) ---
+        
         var avatar = new Avatar(userId);
 
         switch (request.ClassId)
