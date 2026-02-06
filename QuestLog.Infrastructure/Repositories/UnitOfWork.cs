@@ -9,18 +9,24 @@ public class UnitOfWork : IUnitOfWork
     public IAvatarRepository Avatars { get; }
     public IUserRepository Users { get; }
     public ITaskRepository Tasks { get; }
+    public IItemRepository Items { get; }
+    public IInventoryRepository Inventory { get; }
     
     public UnitOfWork(
         QuestLogDbContext context, 
         IUserRepository userRepository,
         IAvatarRepository avatarRepository,
-        ITaskRepository taskRepository)
+        ITaskRepository taskRepository,
+        IItemRepository itemRepository,
+        IInventoryRepository inventoryRepository)
     {
         _context = context;
         
         Avatars = avatarRepository;
         Users = userRepository;
         Tasks = taskRepository;
+        Items = itemRepository;
+        Inventory = inventoryRepository;
     }
 
     public async Task<int> CompleteAsync()

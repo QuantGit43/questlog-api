@@ -12,6 +12,8 @@ public class QuestLogDbContext: DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Task> Tasks { get; set; }
     public DbSet<Avatar> Avatars { get; set; }
+    public DbSet<Item> Items { get; set; }
+    public DbSet<Inventory> Inventory{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -35,6 +35,18 @@ namespace QuestLog.Infrastructure.Migrations
                     b.Property<int>("Dexterity")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("EquippedBottomId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("EquippedGearId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("EquippedHairId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("EquippedTopId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Gold")
                         .HasColumnType("integer");
 
@@ -82,6 +94,65 @@ namespace QuestLog.Infrastructure.Migrations
 
                             t.HasCheckConstraint("CK_Avatar_XP_Positive", "\"XP\" >= 0");
                         });
+                });
+
+            modelBuilder.Entity("QuestLog.Domain.Entities.Inventory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AvatarId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AvatarId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Inventory");
+                });
+
+            modelBuilder.Entity("QuestLog.Domain.Entities.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AssetId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EffectValue")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Slot")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("QuestLog.Domain.Entities.Task", b =>
@@ -191,6 +262,23 @@ namespace QuestLog.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("QuestLog.Domain.Entities.Inventory", b =>
+                {
+                    b.HasOne("QuestLog.Domain.Entities.Avatar", null)
+                        .WithMany("Inventory")
+                        .HasForeignKey("AvatarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuestLog.Domain.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+                });
+
             modelBuilder.Entity("QuestLog.Domain.Entities.Task", b =>
                 {
                     b.HasOne("QuestLog.Domain.Entities.Avatar", "Avatar")
@@ -204,6 +292,8 @@ namespace QuestLog.Infrastructure.Migrations
 
             modelBuilder.Entity("QuestLog.Domain.Entities.Avatar", b =>
                 {
+                    b.Navigation("Inventory");
+
                     b.Navigation("Tasks");
                 });
 
