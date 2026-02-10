@@ -1,5 +1,4 @@
-﻿using System.Security.Claims; // Не забудьте додати цей using
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestLog.Api.Exceptions;
@@ -25,8 +24,6 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
         var taskId = await _sender.Send(command);
-    
-        // Треба отримати створене завдання, щоб повернути його фронту
         var query = new GetTaskByIdQuery { TaskId = taskId };
         var createdTask = await _sender.Send(query);
 

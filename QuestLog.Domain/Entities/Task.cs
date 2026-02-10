@@ -6,7 +6,6 @@ namespace QuestLog.Domain.Entities;
 
 public class Task
 {
-    // Константи для дефолтних значень
     private const int DefaultBaseXp = 100;
     private const int DefaultBaseGold = 100;
 
@@ -64,7 +63,7 @@ public class Task
             DifficultyLevel.Easy => 1,
             DifficultyLevel.Medium => 2,
             DifficultyLevel.Hard => 4,
-            _ => 2 //Дефолт, якщо прийде щось невідоме
+            _ => 2
         };
         
         XPReward = baseXpReward * multiplier;
