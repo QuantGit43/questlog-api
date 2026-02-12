@@ -63,6 +63,8 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommand).Assembly);
 
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>(); 
 builder.Services.AddScoped<IAvatarRepository, AvatarRepository>();
@@ -124,7 +126,7 @@ builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IAiService, OpenRouterService>();
-builder.Services.AddScoped<ITaskDifficultyEvaluator, AiTaskDifficultyEvaluator>();
+builder.Services.AddScoped<ITaskAnalyser, AiTaskAnalyzer>();
 
 
 var app = builder.Build();

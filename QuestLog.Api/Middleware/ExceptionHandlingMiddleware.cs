@@ -126,6 +126,10 @@ namespace QuestLog.Api.Middleware
                     status = StatusCodes.Status401Unauthorized;
                     message = "Invalid email or password.";
                     break;
+                case InvalidOperationException:
+                    status = StatusCodes.Status400BadRequest;
+                    message = ex.Message;
+                    break;
             }
 
             return (status, message);
