@@ -6,6 +6,9 @@ public interface IUnitOfWork: IDisposable
     ITaskRepository Tasks { get; }
     IAvatarRepository Avatars { get; }
     
+    IItemRepository Items { get; }
+    IInventoryRepository Inventory { get; }
+    
     Task<int> CompleteAsync();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

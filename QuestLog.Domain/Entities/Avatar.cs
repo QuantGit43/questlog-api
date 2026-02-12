@@ -22,10 +22,17 @@ public class Avatar
     public int Dexterity { get; set; }
     public int Wisdom { get; set; }
     public virtual ICollection<Task>  Tasks { get; private set; } = new List<Task>();
-
+    
+    public Guid? EquippedHairId { get; private set; }
+    public Guid? EquippedTopId { get; private set; }
+    public Guid? EquippedBottomId { get; private set; }
+    public Guid? EquippedGearId { get; private set; }
+    
+    public virtual ICollection<Inventory> Inventory { get; private set; } = new List<Inventory>();
     private Avatar() 
     {
         Tasks = new HashSet<Task>();
+        Inventory = new HashSet<Inventory>();
     }
     public Avatar(Guid userId)
     {
@@ -44,8 +51,46 @@ public class Avatar
         Wisdom = 1;
         
         Tasks = new HashSet<Task>();
+        Inventory = new HashSet<Inventory>();
         
     }
+
+    public void Equip(Item item)
+    {
+        if (item.Type == ItemType.Consumable)
+        {
+            throw new InvalidOperationException("Це не можна одягнути! Це треба використати (Use).");
+        }
+        switch (item.Slot)
+        {
+            case EquipmentSlot.Hair:
+                EquippedHairId = item.Id;
+                break;
+            case EquipmentSlot.Top:
+                EquippedTopId = item.Id;
+                break;
+            case EquipmentSlot.Bottom:
+                EquippedBottomId = item.Id;
+                break;
+            case EquipmentSlot.Gear:
+                EquippedGearId = item.Id;
+                break;
+            default:
+                throw new InvalidOperationException("Невідомий слот для одягання.");
+        }
+    }
+
+    public void Use(Item item)
+    {
+        if (item.Type == ItemType.Equipment)
+        {
+            throw new InvalidOperationException("Цей предмет не можна випити/з'їсти.");
+        }
+        if (item.Name.Contains("Health") || item.Name.Contains("HP"))
+        {
+            Heal(item.EffectValue); 
+        }
+}
     public void ChooseClass(string name, AvatarClass newClass, int maxHp, int str, int intel, int dex, int wis)
     {
         Name = name;
@@ -63,12 +108,26 @@ public class Avatar
     {
         if (amount < 0) return;
         XP += amount;
+        CheckLevelUp();
     }
+
+    private void CheckLevelUp()
+    {
+        long threshold = Level * 100;
+        while (XP >= threshold)
+        {
+            XP -= threshold;
+            Level++;
+            MaxHP += 10;
+            HP = MaxHP;
+            threshold = Level * 100;
+        }    }
 
     public void AddGold(int amount)
     {
         if (amount < 0) return;
         Gold += amount;
+        CheckLevelUp();
     }
     public void TakeDamage(int amount)
     {
@@ -92,15 +151,13 @@ public class Avatar
             HP = MaxHP;
         }
     }
-    public void UpdateDetails(string name, AvatarClass avatarClass)
+    
+    public bool SpendGold(int amount)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Ім'я аватара не може бути порожнім.");
-            
-        if (name.Length > 50) 
-            throw new ArgumentException("Ім'я занадто довге.");
-        Class = avatarClass;
-        Name = name;
+        if (amount < 0 || amount > Gold) return false;
+
+        Gold -= amount;
+        return true;
     }
 
     public int GetStatValue(TaskCategory category)
@@ -116,8 +173,8 @@ public class Avatar
     }
     public void GainResources(int xp, int gold)
     {
-        XP += xp;
-        Gold += gold;
+        AddExperience(xp);
+        AddGold(gold);
     }
     
     public void TrainStat(TaskCategory category)
@@ -148,7 +205,7 @@ public class Avatar
                 Wisdom++;
                 break;
 
-            default:
+            default: 
                 break;
         }
     }
