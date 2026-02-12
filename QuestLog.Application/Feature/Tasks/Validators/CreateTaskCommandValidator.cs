@@ -12,7 +12,5 @@ public class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
             .MaximumLength(100).WithMessage("Назва завдання занадто довга");
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("Опис завдання занадто довгий");
-        RuleFor(x => x.DueDate)
-            .GreaterThan(DateTime.Now).WithMessage("Дата виконання має бути в майбутньому");
     }
 }
