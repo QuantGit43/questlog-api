@@ -8,6 +8,8 @@ public class AvatarDto
     public Guid UserId { get; set; }
     public string? Name { get; set; }
     public AvatarClass Class { get; set; }
+    
+    public string Gender { get; set; }
     public int Level { get; set; }
     public long XP { get; set; }
     public int HP { get; set; }

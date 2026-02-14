@@ -41,7 +41,8 @@ public class GetInventoryQueryHandler: IRequestHandler<GetInventoryQuery, PagedL
                 Type = u.Item.Type,
                 Slot = u.Item.Slot,
                 EffectValue = u.Item.EffectValue,
-                AssetId = u.Item.AssetId
+                MaleAssetId = u.Item.MaleAssetId,
+                FemaleAssetId = u.Item.FemaleAssetId
             }
         });
 

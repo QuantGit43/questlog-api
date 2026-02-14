@@ -28,6 +28,8 @@ public class Avatar
     public Guid? EquippedBottomId { get; private set; }
     public Guid? EquippedGearId { get; private set; }
     
+    public Gender VisualGender { get; set; } = Gender.Male;
+    
     public virtual ICollection<Inventory> Inventory { get; private set; } = new List<Inventory>();
     private Avatar() 
     {
@@ -207,6 +209,20 @@ public class Avatar
 
             default: 
                 break;
+        }
+    }
+    public void ToggleGender()
+    {
+        VisualGender = VisualGender == Gender.Male ? Gender.Female : Gender.Male;
+    }
+    public void Unequip(EquipmentSlot slot)
+    {
+        switch (slot)
+        {
+            case EquipmentSlot.Hair: EquippedHairId = null; break;
+            case EquipmentSlot.Top: EquippedTopId = null; break;
+            case EquipmentSlot.Bottom: EquippedBottomId = null; break;
+            case EquipmentSlot.Gear: EquippedGearId = null; break;
         }
     }
 }

@@ -50,4 +50,18 @@ public class AvatarController: ControllerBase
             await _sender.Send(command);
             return Ok();
     }
+    
+    [HttpPost("visuals/toggle-gender")]
+    public async Task<IActionResult> ToggleGender()
+    {
+        await _sender.Send(new ToggleGenderCommand());
+        return Ok(new { message = "Стать змінено" });
+    }
+    
+    [HttpGet("visuals/appearance")]
+    public async Task<IActionResult> GetAppearance()
+    {
+        var result = await _sender.Send(new GetAvatarAppearanceQuery());
+        return Ok(result);
+    }
 }
