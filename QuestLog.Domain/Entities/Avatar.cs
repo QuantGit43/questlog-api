@@ -36,12 +36,12 @@ public class Avatar
         Tasks = new HashSet<Task>();
         Inventory = new HashSet<Inventory>();
     }
-    public Avatar(Guid userId)
+    public Avatar(Guid userId, string name, AvatarClass avatarClass)
     {
         Id = Guid.NewGuid();
-        Name = "New Name";
+        Name = name;
         UserId = userId;
-        Class = AvatarClass.Warrior;
+        Class = avatarClass;
         Level = 1;
         XP = 0;
         MaxHP = 100; 

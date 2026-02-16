@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using QuestLog.Domain.Entities;
 using QuestLog.Domain.Enums;
 using QuestLog.Domain.Interfaces;
+using QuestLog.Domain.Config;
 using QuestLog.Application.Feature.Avatars.Commands;
 
 namespace QuestLog.Application.Feature.Avatars.CommandsHandlers;
@@ -34,26 +35,22 @@ public class CreateAvatarCommandHandler : IRequestHandler<CreateAvatarCommand, G
             return existingAvatar.Id;
         }
         
-        var avatar = new Avatar(userId);
+        var avatar = new Avatar(userId, request.ClassName, request.Class);
 
-        switch (request.ClassId)
+        if (!ClassDefinitions.Stats.TryGetValue(request.Class, out var stats))
         {
-            case 1: 
-                avatar.ChooseClass("The Healer", AvatarClass.Healer, 80, 2, 4, 3, 8);
-                break;
-            case 2: 
-                avatar.ChooseClass("The Warrior", AvatarClass.Warrior, 120, 8, 2, 4, 2);
-                break;
-            case 3: 
-                avatar.ChooseClass("The Crafter", AvatarClass.Crafter, 100, 3, 5, 8, 3);
-                break;
-            case 4: 
-                avatar.ChooseClass("The Mage", AvatarClass.Mage, 60, 1, 9, 3, 5);
-                break;
-            default:
-                avatar.ChooseClass("Adventurer", AvatarClass.Warrior, 100, 5, 5, 5, 5);
-                break;
+            stats = new ClassStats { MaxHp = 100, Strength = 5, Intellect = 5, Dexterity = 5, Wisdom = 5 };
         }
+
+        avatar.ChooseClass(
+            request.ClassName,
+            request.Class,
+            stats.MaxHp,
+            stats.Strength,
+            stats.Intellect,
+            stats.Dexterity,
+            stats.Wisdom
+        );
 
         await _avatarRepository.AddAsync(avatar);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

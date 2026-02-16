@@ -33,11 +33,8 @@ public class TaskController : ControllerBase
     [HttpPost("analyze-complexity")]
     public async Task<IActionResult> AnalyzeComplexity([FromBody] AnalyzeComplexityRequest request)
     {
-        // Конвертуємо request від фронта в Query для MediatR
         var query = new AnalyzeTaskComplexityQuery(request.Title, request.Description);
-    
         var result = await _sender.Send(query);
-    
         return Ok(result);
     }
 
@@ -93,5 +90,4 @@ public class TaskController : ControllerBase
     }
 }
 
-//DTO для вхідного JSON 
 public record AnalyzeComplexityRequest(string Title, string? Description);

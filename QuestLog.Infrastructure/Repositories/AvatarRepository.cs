@@ -13,6 +13,7 @@ public class AvatarRepository: Repository<Avatar>, IAvatarRepository
     {
         return await _context.Avatars
             .Include(a => a.Tasks)
+            .Include(a => a.User)
             .FirstOrDefaultAsync(a => a.UserId == userId);
     }
     public new async Task<Avatar?> GetByIdAsync(Guid id)

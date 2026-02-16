@@ -28,15 +28,12 @@ public class User
     
     protected User() {}
 
-    public User(string? username, string? email, string? passwordHash, Avatar? avatar = null)
+    public User(string? username, string? email, string? passwordHash)
     {
         Id = Guid.NewGuid();
         Username = username;
         Email = email;
         PasswordHash = passwordHash; 
-        Avatar = avatar;
-        if (avatar != null) 
-            AvatarId = avatar.Id;
     }
     
     public void UpdateProfile(string username, string email)
