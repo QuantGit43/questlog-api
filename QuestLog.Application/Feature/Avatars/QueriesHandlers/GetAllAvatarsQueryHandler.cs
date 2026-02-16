@@ -33,6 +33,7 @@ public class GetAllAvatarsQueryHandler : IRequestHandler<GetAllAvatarsQuery, Pag
             Id = a.Id,
             Name = a.Name,
             Class = a.Class,
+            Gender = a.VisualGender.ToString(),
             Level = a.Level,
             XP = a.XP,
             UserId = a.UserId,

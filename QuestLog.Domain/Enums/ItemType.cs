@@ -2,6 +2,6 @@
 
 public enum ItemType
 {
-    Consumable = 0,
-    Equipment = 1
+    Equipment  = 0,
+    Consumable = 1
 }

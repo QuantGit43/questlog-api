@@ -31,7 +31,8 @@ public class GetItemByIdQueryHandler: IRequestHandler<GetItemByIdQuery, ItemDto>
             Type = item.Type,
             Slot = item.Slot,
             EffectValue = item.EffectValue,
-            AssetId = item.AssetId
+            MaleAssetId = item.MaleAssetId,
+            FemaleAssetId = item.FemaleAssetId
         };
     }
 }

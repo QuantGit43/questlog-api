@@ -37,7 +37,8 @@ public class GetAllItemsQueryHandler: IRequestHandler<GetAllItemsQuery, PagedLis
             Type = u.Type,
             Slot = u.Slot,
             EffectValue = u.EffectValue,
-            AssetId = u.AssetId
+            MaleAssetId = u.MaleAssetId,
+            FemaleAssetId = u.FemaleAssetId
         });
 
         return await dtoQuery.ToPagedListAsync(request.PageNumber, request.PageSize);

@@ -27,7 +27,8 @@ public class UpdateItemCommandHandler: IRequestHandler<UpdateItemCommand>
         item.Type = request.Type;
         item.Slot = request.Slot;
         item.EffectValue = request.EffectValue;
-        item.AssetId = request.AssetId;
+        item.MaleAssetId = request.MaleAssetId;
+        item.FemaleAssetId = request.FemaleAssetId;
 
         _unitOfWork.Items.Update(item);
         await _unitOfWork.CompleteAsync();

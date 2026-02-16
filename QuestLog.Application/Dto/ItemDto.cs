@@ -10,6 +10,7 @@ public class ItemDto
     public int Price { get; set; }
     public ItemType Type { get; set; }
     public EquipmentSlot Slot { get; set; }
-    public int EffectValue { get; set; }
-    public string AssetId { get; set; }
+    public int? EffectValue { get; set; }
+    public string? MaleAssetId { get; set; }
+    public string? FemaleAssetId { get; set; }
 }

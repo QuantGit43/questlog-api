@@ -59,4 +59,11 @@ public class ItemController : Controller
         var result = await _sender.Send(query);
         return Ok(result);  
     }
+
+    [HttpGet("shop")]
+    public async Task<IActionResult> GetShop([FromQuery] GetShopItemQuery query)
+    {
+        var result = await _sender.Send(query);
+        return Ok(result);
+    }
 }

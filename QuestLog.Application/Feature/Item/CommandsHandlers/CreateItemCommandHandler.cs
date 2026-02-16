@@ -23,7 +23,9 @@ public class CreateItemCommandHandler: IRequestHandler<CreateItemCommand, Guid>
             Type = request.Type,
             Slot = request.Slot,
             EffectValue = request.EffectValue,
-            AssetId = request.AssetId
+            MaleAssetId = request.MaleAssetId,
+            FemaleAssetId = request.FemaleAssetId,
+            RecommendedClass = request.RecommendedClass
         };
         await _unitOfWork.Items.AddAsync(item);
         await _unitOfWork.CompleteAsync();
