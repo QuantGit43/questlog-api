@@ -32,8 +32,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
         var avatar = await _unitOfWork.Avatars.GetByUserIdAsync(currentUserId);
 
         if (avatar == null) throw new KeyNotFoundException("Avatar not found.");
-
-        // 1. Визначаємо Складність та Категорію
+        
         DifficultyLevel difficulty;
         TaskCategory category;
 
@@ -50,11 +49,9 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
             difficulty = request.Difficulty ?? aiResult.Difficulty;
             category = request.Category ?? aiResult.Category;
         }
-
-        // 2. Визначаємо фінальну нагороду (з валідацією)
+        
         var (finalXp, finalGold) = ValidateClientRewards(request, difficulty, currentUserId);
-
-        // 3. Визначаємо Дату
+        
         DateTime dueDate = request.DueDate ?? CalculateDueDate(difficulty);
 
         var task = new Task(
@@ -80,10 +77,8 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
     /// </summary>
     private (int xp, int gold) ValidateClientRewards(CreateTaskCommand request, DifficultyLevel difficulty, Guid userId)
     {
-        // Спочатку рахуємо наші "чесні" стандартні значення
         var (standardXp, standardGold) = CalculateRewards(difficulty);
-
-        // Якщо клієнт нічого не прислав — повертаємо стандарт
+        
         if (!request.XpReward.HasValue || !request.GoldReward.HasValue)
         {
             return (standardXp, standardGold);
@@ -91,18 +86,14 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
 
         var clientXp = request.XpReward.Value;
         var clientGold = request.GoldReward.Value;
-
-        // Отримуємо ліміти
+        
         var (maxXp, maxGold) = GetMaxAllowedRewards(difficulty);
-
-        // ВАЛІДАЦІЯ: Перевіряємо на чітерство
+        
         if (clientXp > maxXp || clientGold > maxGold)
         {
-            // Скидаємо до стандарту, ігноруючи клієнта
             return (standardXp, standardGold);
         }
 
-        // Якщо все ок — повертаємо значення клієнта
         return (clientXp, clientGold);
     }
 
@@ -117,9 +108,6 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
         };
     }
     
-    /// <summary>
-    ///  Limits is used to verify rewards
-    /// </summary>
     private (int maxXp, int maxGold) GetMaxAllowedRewards(DifficultyLevel difficulty)
     {
         return difficulty switch // (xp, gold)
