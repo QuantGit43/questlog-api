@@ -50,4 +50,12 @@ public class AvatarController: ControllerBase
             await _sender.Send(command);
             return Ok();
     }
+    
+    [HttpGet("current")]
+    public async Task<IActionResult> GetCurrentAvatar()
+    {
+        var query = new GetCurrentAvatarQuery(); 
+        var result = await _sender.Send(query);
+        return Ok(result);
+    }
 }

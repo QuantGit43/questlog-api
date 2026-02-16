@@ -22,19 +22,21 @@ public class CompleteTaskCommandHandler: IRequestHandler<CompleteTaskCommand, Ta
         {
             throw new KeyNotFoundException($"Завдання з ID {request.TaskId} не знайдено.");
         }
-        var avatar = await _unitOfWork.Avatars.GetByIdAsync(task.AvatarId);
-        if (avatar != null && avatar.Id != _userContext.AvatarId && !_userContext.IsAdmin)
+        
+        var taskAvatar = await _unitOfWork.Avatars.GetByIdAsync(task.AvatarId);
+        
+        if (taskAvatar != null && taskAvatar.UserId != _userContext.UserId && !_userContext.IsAdmin)
         {
             throw new UnauthorizedAccessException("Ви не можете виконати чуже завдання.");
         }
         
-        var (earnedXp, earnedGold) = task.Complete(avatar);
-        
-       _unitOfWork.Tasks.Update(task);
-       _unitOfWork.Avatars.Update(avatar);
+        var (earnedXp, earnedGold) = task.Complete(taskAvatar);
     
-       await _unitOfWork.CompleteAsync();
+        _unitOfWork.Tasks.Update(task);
+        _unitOfWork.Avatars.Update(taskAvatar);
 
-       return new TaskCompletionDto(earnedXp, earnedGold);       
+        await _unitOfWork.CompleteAsync();
+
+        return new TaskCompletionDto(earnedXp, earnedGold);       
     }
 }
