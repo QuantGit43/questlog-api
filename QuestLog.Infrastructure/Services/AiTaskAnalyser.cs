@@ -71,7 +71,7 @@ public class AiTaskAnalyzer : ITaskAnalyser
                 .Trim();
 
             var options = new JsonSerializerOptions
-            {
+            {   
                 PropertyNameCaseInsensitive = true,
                 Converters = { new JsonStringEnumConverter() } // Автоматично конвертує рядки в Enum
             };

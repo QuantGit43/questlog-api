@@ -6,8 +6,8 @@ namespace QuestLog.Domain.Entities;
 
 public class Task
 {
-    private const int DefaultBaseXp = 100;
-    private const int DefaultBaseGold = 100;
+    private const int DefaultXp = 10;
+    private const int DefaultGold = 5;
 
     public Guid Id { get; private set; }
     
@@ -40,17 +40,18 @@ public class Task
     
     private Task() { }
     
+    // Зверніть увагу: я перейменував параметри з 'baseXpReward' на 'xpReward',
+    // щоб показати, що це вже фінальне число.
     public Task(Guid avatarId,
         string title,
         TaskType type,
         DifficultyLevel difficultyLevel,
         TaskCategory category ,
         string? description = "",
-        int baseGoldReward = DefaultBaseGold,
-        int baseXpReward = DefaultBaseXp,
+        int xpReward = DefaultXp,     
+        int goldReward = DefaultGold, 
         DateTime? dueDate = null)
-        {
-            
+    {
         Id = Guid.NewGuid();
         AvatarId = avatarId;
         Title = title;
@@ -58,22 +59,23 @@ public class Task
         Description = description;
         Difficulty = difficultyLevel;
         
-        var multiplier = difficultyLevel switch
-        {
-            DifficultyLevel.Easy => 1,
-            DifficultyLevel.Medium => 2,
-            DifficultyLevel.Hard => 4,
-            _ => 2
-        };
+        // --- ЗМІНА ТУТ: Множники видалено ---
+        // Ми просто беремо те, що нам дали.
+        // Якщо дали 100 XP - записуємо 100 XP.
         
-        XPReward = baseXpReward * multiplier;
-        GoldReward = baseGoldReward * multiplier;
+        XPReward = xpReward;
+        GoldReward = goldReward;
 
-        DueDate = dueDate.HasValue ? DateTime.SpecifyKind(dueDate.Value, DateTimeKind.Utc) : null;
+        // Логіка дати
+        DueDate = dueDate.HasValue 
+            ? DateTime.SpecifyKind(dueDate.Value, DateTimeKind.Utc) 
+            : null;
+
         CreatedAt = DateTime.UtcNow;
         IsCompleted = false;
         Category = category;
     }
+
     public (int xp, int gold) Complete(Avatar? avatar)
     {
         if (IsCompleted)
@@ -84,6 +86,9 @@ public class Task
         {
             throw new InvalidOperationException("Avatar does not own this task.");
         }
+
+        // Логіку бонусів від характеристик гравця (Strength/Intelligence) залишаємо!
+        // Це вже не "множник складності", це "множник прокачки героя".
         int relevantStat = avatar.GetStatValue(this.Category);
 
         double multiplier = 1.0 + (relevantStat / 100.0);
@@ -91,11 +96,9 @@ public class Task
         double calculatedXp = this.XPReward * multiplier;
         
         int finalXp = (int)Math.Round(calculatedXp, MidpointRounding.AwayFromZero);
-        
         int finalGold = this.GoldReward;
         
         avatar.GainResources(finalXp, finalGold);
-        
         avatar.TrainStat(this.Category);
         
         IsCompleted = true;
@@ -107,7 +110,7 @@ public class Task
     {
         if (string.IsNullOrWhiteSpace(title) || title.Length > 100)
         {
-            throw new ArgumentException("The title cannot be empty or longer than 100 characters.", nameof(title));
+            throw new ArgumentException("Title error", nameof(title));
         }
         if (xpReward < 0 || goldReward < 0)
         {

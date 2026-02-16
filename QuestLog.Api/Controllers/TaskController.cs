@@ -34,9 +34,7 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> AnalyzeComplexity([FromBody] AnalyzeComplexityRequest request)
     {
         var query = new AnalyzeTaskComplexityQuery(request.Title, request.Description);
-    
         var result = await _sender.Send(query);
-    
         return Ok(result);
     }
 

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using QuestLog.Application.Dto;
+using QuestLog.Domain.Enums;
 using QuestLog.Domain.Interfaces;
 
 namespace QuestLog.Application.Feature.Avatars.Queries;
@@ -11,6 +12,7 @@ public class AvatarProfileDto
     public long Xp { get; set; }
     public int Hp { get; set; }
     public int Level { get; set; }
+    public AvatarClass Class { get; set; }
 }
 
 public class GetCurrentAvatarQuery : IRequest<AvatarProfileDto>
@@ -41,13 +43,13 @@ public class GetCurrentAvatarQueryHandler : IRequestHandler<GetCurrentAvatarQuer
 
         return new AvatarProfileDto
         {
-            Username = avatar.User.Username, 
-            
-
+            Username = avatar.User?.Username ?? avatar.Name ?? "Hero",
             Gold = avatar.Gold,
             Xp = avatar.XP,
             Hp = avatar.HP,
-            Level = (int)(avatar.XP / 100) + 1
+            Level = (int)(avatar.XP / 100) + 1,
+            
+            Class = avatar.Class 
         };
     }
 }
