@@ -6,7 +6,7 @@ QuestLog API is the powerful backend service for the QuestLog platform, a gamifi
 
 Built with **ASP.NET Core** and following **Clean Architecture** principles, this API is designed for scalability, maintainability, and performance.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 -   **Framework:** [ASP.NET Core 8/9](https://dotnet.microsoft.com/) (Web API)
 -   **Database:** [PostgreSQL](https://www.postgresql.org/)
@@ -18,7 +18,7 @@ Built with **ASP.NET Core** and following **Clean Architecture** principles, thi
 -   **Containerization:** [Docker](https://www.docker.com/) & Docker Compose
 -   **Documentation:** [Swagger / OpenAPI](https://swagger.io/)
 
-## 🏛️ Architecture
+## Architecture
 
 The solution is organized into four distinct layers to enforce separation of concerns:
 
