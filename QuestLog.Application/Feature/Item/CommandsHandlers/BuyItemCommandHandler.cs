@@ -17,7 +17,7 @@ public class BuyItemCommandHandler: IRequestHandler<BuyItemCommand, bool>
 
     public async Task<bool> Handle(BuyItemCommand request, CancellationToken cancellationToken)
     {
-        var avatar = await _unitOfWork.Avatars.GetByIdAsync(_userContext.AvatarId);
+        var avatar = await _unitOfWork.Avatars.GetByUserIdAsync(_userContext.UserId);
         if (avatar == null)
         {
             throw new KeyNotFoundException("Аватар не знайдено.");

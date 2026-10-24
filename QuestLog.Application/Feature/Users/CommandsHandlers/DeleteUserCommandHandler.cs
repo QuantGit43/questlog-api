@@ -28,8 +28,7 @@ public class DeleteUserCommandHandler: IRequestHandler<DeleteUserCommand>
             throw new UnauthorizedAccessException("Ви не можете видалити акаунт іншого користувача.");
         }
         
-        var avatar = await _unitOfWork.Avatars.GetByIdAsync(user.AvatarId); 
-        if (avatar != null) _unitOfWork.Avatars.Remove(avatar);
+        if (user.Avatar != null) _unitOfWork.Avatars.Remove(user.Avatar);
         _unitOfWork.Users.Remove(user);
         await _unitOfWork.CompleteAsync();
     }

@@ -20,7 +20,7 @@ public class ToggleGenderCommandHandler : IRequestHandler<ToggleGenderCommand, b
 
     public async Task<bool> Handle(ToggleGenderCommand request, CancellationToken cancellationToken)
     {
-        var avatar = await _unitOfWork.Avatars.GetByIdAsync(_userContext.AvatarId);
+        var avatar = await _unitOfWork.Avatars.GetByUserIdAsync(_userContext.UserId);
         if (avatar == null) return false;
 
         avatar.ToggleGender();

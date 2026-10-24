@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestLog.Application.Feature.Inventory.Commands;
 using QuestLog.Application.Feature.Inventory.Query;
 
 namespace QuestLog.Api.Controllers;
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class InventoryController : Controller
 {

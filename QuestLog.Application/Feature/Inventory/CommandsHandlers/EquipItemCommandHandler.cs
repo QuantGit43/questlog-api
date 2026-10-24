@@ -17,7 +17,7 @@ public class EquipItemCommandHandler: IRequestHandler<EquipItemCommand, bool>
 
     public async Task<bool> Handle(EquipItemCommand request, CancellationToken cancellationToken)
     {
-        var avatar = await _unitOfWork.Avatars.GetByIdAsync(_userContext.AvatarId);
+        var avatar = await _unitOfWork.Avatars.GetByUserIdAsync(_userContext.UserId);
 
         if (avatar == null)
         {

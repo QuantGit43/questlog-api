@@ -106,20 +106,14 @@ public class Task
         return (finalXp, finalGold);
     }
 
-    public void UpdateDetails(string title, string description, int xpReward, int goldReward)
+    public void UpdateDetails(string title, string description)
     {
         if (string.IsNullOrWhiteSpace(title) || title.Length > 100)
         {
             throw new ArgumentException("Title error", nameof(title));
         }
-        if (xpReward < 0 || goldReward < 0)
-        {
-            throw new ArgumentException("Awards cannot be negative.");
-        }
 
         Title = title;
         Description = description;
-        XPReward = xpReward;
-        GoldReward = goldReward;
     }
 }

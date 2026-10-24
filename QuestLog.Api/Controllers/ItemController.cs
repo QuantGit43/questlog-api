@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestLog.Application.Feature.Item.Commands;
 using QuestLog.Application.Feature.Item.Query;
@@ -6,17 +7,19 @@ using QuestLog.Domain.Interfaces;
 
 namespace QuestLog.Api.Controllers;
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class ItemController : Controller
 {
     private readonly ISender _sender;
-    
+
     public ItemController(ISender sender)
     {
         _sender = sender;
     }
-    
+
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateItem([FromBody] CreateItemCommand command)
     {
         var id = await _sender.Send(command);
@@ -31,6 +34,7 @@ public class ItemController : Controller
     }
     
     [HttpDelete]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteItem(Guid id)
     {
         await _sender.Send(new DeleteItemCommand { ItemId = id });
@@ -38,6 +42,7 @@ public class ItemController : Controller
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateItem([FromBody] UpdateItemCommand command)
     {
         await _sender.Send(command);
