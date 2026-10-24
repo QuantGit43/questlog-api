@@ -23,9 +23,7 @@ public class GetShopItemQueryHandler: IRequestHandler<GetShopItemQuery, PagedLis
 
     public async Task<PagedList<ShopItemDto>> Handle(GetShopItemQuery request, CancellationToken cancellationToken)
     {
-        var avatarId = _userContext.AvatarId;
-        if (avatarId == Guid.Empty) throw new UnauthorizedAccessException();
-        var avatar = await _avatarRepository.GetByIdAsync(avatarId);
+        var avatar = await _avatarRepository.GetByUserIdAsync(_userContext.UserId);
         if (avatar == null) throw new KeyNotFoundException("Avatar not found");
         bool isMale = avatar.VisualGender == Gender.Male;
         var avatarClass = avatar.Class;

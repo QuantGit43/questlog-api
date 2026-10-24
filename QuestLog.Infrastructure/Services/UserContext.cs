@@ -21,23 +21,6 @@ public class UserContext: IUserContext
         }
     }
 
-    public Guid AvatarId
-    {
-        get
-        {
-            var claim = _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => 
-                c.Type == "avatarId" || 
-                c.Type == "AvatarId" ||
-                c.Type.EndsWith("/avatarId"));
-                
-            if (claim == null || !Guid.TryParse(claim.Value, out var avatarId))
-            {
-                return Guid.Empty;
-            }
-            
-            return avatarId;
-        }
-    }
     public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
     
     public bool IsAdmin => _httpContextAccessor.HttpContext?.User?.IsInRole("Admin") ?? false;

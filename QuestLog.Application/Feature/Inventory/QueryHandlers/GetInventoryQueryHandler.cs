@@ -10,15 +10,23 @@ namespace QuestLog.Application.Feature.Inventory.QueryHandlers;
 public class GetInventoryQueryHandler: IRequestHandler<GetInventoryQuery, PagedList<InventoryDto>>
 {
     private readonly IInventoryRepository _inventoryRepository;
-    
-    public GetInventoryQueryHandler(IInventoryRepository inventoryRepository)
+    private readonly IAvatarRepository _avatarRepository;
+    private readonly IUserContext _userContext;
+
+    public GetInventoryQueryHandler(IInventoryRepository inventoryRepository, IAvatarRepository avatarRepository, IUserContext userContext)
     {
         _inventoryRepository = inventoryRepository;
+        _avatarRepository = avatarRepository;
+        _userContext = userContext;
     }
-    
+
     public async Task<PagedList<InventoryDto>> Handle(GetInventoryQuery request, CancellationToken cancellationToken)
     {
-        var query = _inventoryRepository.GetQueryable();
+        var avatar = await _avatarRepository.GetByUserIdAsync(_userContext.UserId);
+        if (avatar == null) throw new KeyNotFoundException("Avatar not found");
+
+        var query = _inventoryRepository.GetQueryable()
+            .Where(i => i.AvatarId == avatar.Id);
 
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {

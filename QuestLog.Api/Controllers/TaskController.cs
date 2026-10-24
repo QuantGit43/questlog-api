@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestLog.Api.Exceptions;
-using QuestLog.Api.Extentions;
 using QuestLog.Application.Feature.Tasks.Commands;
 using QuestLog.Application.Feature.Tasks.Queries;
 
